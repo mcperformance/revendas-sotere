@@ -126,35 +126,35 @@
     const LINK_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROTgHcXnaIQlwelJZknF-e_RAKvjPKgWeZVN2GSoajz1ORsCMfNWv1FwZGadV9c4gSfGHw29w3zRRL/pub?gid=0&single=true&output=csv'; 
     let todosImoveis = [];
 
-    function carregarDados() {
-        Papa.parse(LINK_CSV, {
-            download: true, 
-            header: true, 
-            skipEmptyLines: true,
-            complete: function(r) {
-                // LOG DE SEGURANÇA: Abra o Inspecionar (F12) no navegador para ver se os dados chegaram
-                console.log("Dados recebidos:", r.data);
+   function carregarDados() {
+    Papa.parse(LINK_CSV, {
+        download: true,
+        header: true,
+        skipEmptyLines: 'greedy', // Ignora linhas vazias de forma agressiva
+        complete: function(r) {
+            console.log("Dados Brutos:", r.data); // Para vermos o que chegou
 
-                // Filtro mais flexível: remove apenas linhas onde não há dados de imóvel
-                todosImoveis = r.data.filter(i => {
-                    return i.Empreendimento || i.EMPREENDIMENTO || i.nome;
-                });
+            // Filtra removendo linhas onde as colunas principais estão vazias
+            todosImoveis = r.data.filter(i => {
+                // Tenta achar a coluna de nome independente de maiúsculas/minúsculas
+                const nome = i.Empreendimento || i.EMPREENDIMENTO || i.nome;
+                return nome && nome.trim() !== "";
+            });
 
-                if (todosImoveis.length > 0) {
-                    document.getElementById('total-geral').innerText = `${todosImoveis.length} Unidades em Estoque`;
-                    popularFiltros();
-                    renderizarSumario(todosImoveis);
-                } else {
-                    document.getElementById('total-geral').innerText = "Nenhum imóvel encontrado na planilha";
-                    console.error("Erro: A coluna 'Empreendimento' não foi encontrada ou está vazia.");
-                }
-            },
-            error: function(err) {
-                console.error("Erro ao carregar o CSV:", err);
-                document.getElementById('total-geral').innerText = "Erro na conexão com a planilha";
+            if (todosImoveis.length > 0) {
+                document.getElementById('total-geral').innerText = `${todosImoveis.length} Unidades em Estoque`;
+                popularFiltros();
+                renderizarSumario(todosImoveis);
+            } else {
+                document.getElementById('total-geral').innerText = "Planilha vazia ou colunas incorretas";
             }
-        });
-    }
+        },
+        error: function(err) {
+            console.error("Erro na leitura:", err);
+            document.getElementById('total-geral').innerText = "Erro ao conectar com Google Sheets";
+        }
+    });
+}
 
     function popularFiltros() {
         const fEmp = document.getElementById('filtra-empreendimento');
