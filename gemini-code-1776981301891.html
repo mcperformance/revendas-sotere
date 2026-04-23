@@ -4,208 +4,477 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal de Revendas | Sotere Negócios Imobiliários</title>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
     <style>
-        /* --- CSS BASE E RESETS --- */
+        /* --- VARIÁVEIS DE DESIGN --- */
         :root {
-            --blue-600: #2563eb;
-            --blue-700: #1d4ed8;
+            --blue-patriani: #3b82f6;
+            --blue-hover: #2563eb;
             --slate-50: #f8fafc;
             --slate-100: #f1f5f9;
             --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
             --slate-400: #94a3b8;
             --slate-500: #64748b;
+            --slate-600: #475569;
             --slate-700: #334155;
             --slate-800: #1e293b;
             --slate-900: #0f172a;
+            --green-whatsapp: #25D366;
         }
 
+        /* --- RESET E BASE --- */
+        * { margin: 0; padding: 0; box-box: border-box; }
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: var(--slate-50); 
-            margin: 0; 
             color: var(--slate-800);
+            line-height: 1.5;
+            overflow-x: hidden;
         }
 
         .container {
             width: 100%;
             max-width: 1280px;
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
+            margin: 0 auto;
+            padding: 0 1.5rem;
         }
 
         /* --- NAVBAR --- */
         .navbar { 
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 0; left: 0; width: 100%;
             z-index: 50;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
             padding: 20px 0;
         }
-        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
-        .logo { h-height: 2.5rem; filter: brightness(0) invert(1); }
-        
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo { height: 40px; filter: brightness(0) invert(1); }
         .status-badge {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(12px);
-            padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 99px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .pulse-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+        .pulse-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+        #total-geral { color: white; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        /* --- HERO --- */
+        /* --- HERO SECTION --- */
         .hero-section {
             position: relative;
             background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)), 
                         url('https://www.construtorapatriani.com.br/_next/image?url=https%3A%2F%2Fd1l3zvrqp603kj.cloudfront.net%2F03_P_SP_FACHADA_VOO_DE_PASSARO_min_9b0ddc5155.jpg&w=1920&q=85');
             background-size: cover;
             background-position: center;
-            min-height: 500px;
+            min-height: 550px;
             display: flex;
             align-items: center;
             color: white;
-            padding-top: 80px;
+            padding-top: 60px;
         }
-        .hero-title { font-size: 3.75rem; font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
-        .hero-title span { color: #60a5fa; }
-        .hero-divider { height: 4px; width: 96px; background: #3b82f6; margin-bottom: 1.5rem; }
-        .hero-subtitle { font-size: 1.5rem; font-weight: 300; color: var(--slate-100); }
+        .hero-content h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
+        .hero-content h1 span { color: #60a5fa; }
+        .hero-divider { height: 4px; width: 80px; background: var(--blue-patriani); margin-bottom: 1.5rem; }
+        .hero-content p { font-size: clamp(1.1rem, 2vw, 1.5rem); font-weight: 300; color: var(--slate-100); }
 
         /* --- FILTROS --- */
-        .search-box {
-            background: white;
-            padding: 2rem;
-            border-radius: 2.5rem;
-            border: 1px solid var(--slate-100);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            margin-top: -5rem;
+        .filters-wrapper {
             position: relative;
-            z-index: 10;
+            z-index: 20;
+            margin-top: -60px;
+            margin-bottom: 40px;
+        }
+        .filters-container {
+            background: white;
+            padding: 30px;
+            border-radius: 2rem;
+            border: 1px solid var(--slate-100);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
             display: grid;
-            grid-template-columns: repeat(12, minmax(0, 1fr));
-            gap: 1rem;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 15px;
         }
-        .input-group { grid-column: span 12; position: relative; }
-        .input-main { 
-            width: 100%; background: var(--slate-50); border: 1px solid var(--slate-200); 
-            padding: 1rem 1rem 1rem 3rem; border-radius: 1rem; outline: none; transition: 0.3s;
+        .search-group { grid-column: span 12; position: relative; }
+        .search-input {
+            width: 100%; padding: 16px 16px 16px 48px; border-radius: 1rem;
+            border: 1px solid var(--slate-200); background: var(--slate-50);
+            outline: none; transition: 0.3s; font-size: 14px;
         }
-        .input-main:focus { ring: 2px solid #dbeafe; }
-        
-        .filter-select { 
-            grid-column: span 3; background: var(--slate-50); border: 1px solid var(--slate-200);
-            padding: 0.75rem; border-radius: 0.75rem; font-weight: 700; text-transform: uppercase;
-            font-size: 0.75rem; color: var(--slate-500); cursor: pointer;
+        .search-input:focus { border-color: var(--blue-patriani); box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); }
+        .search-icon { position: absolute; left: 16px; top: 16px; color: var(--slate-400); width: 20px; }
+
+        .filter-select {
+            grid-column: span 3; padding: 12px; border-radius: 0.75rem;
+            border: 1px solid var(--slate-200); background: var(--slate-50);
+            font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--slate-500); cursor: pointer;
         }
         .btn-reset {
-            grid-column: span 3; background: var(--blue-600); color: white; border: none;
-            border-radius: 0.75rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
-            transition: 0.3s;
+            grid-column: span 3; background: var(--blue-patriani); color: white;
+            border: none; border-radius: 0.75rem; font-weight: 900; text-transform: uppercase;
+            font-size: 10px; letter-spacing: 1px; cursor: pointer; transition: 0.3s;
         }
-        .btn-reset:hover { background: var(--blue-700); }
+        .btn-reset:hover { background: var(--blue-hover); transform: translateY(-2px); }
 
-        /* --- CARDS --- */
-        #view-container { margin-top: 2.5rem; margin-bottom: 2.5rem; }
-        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
-        
-        .card-summary { 
-            transition: all 0.3s ease; border-radius: 2rem; border: 1px solid #e2e8f0; 
-            background: white; height: 100%; display: flex; flex-direction: column; 
-            overflow: hidden; cursor: pointer; 
+        /* --- GRID DE CARDS --- */
+        .view-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .card-summary {
+            background: white; border-radius: 2rem; border: 1px solid var(--slate-200);
+            overflow: hidden; transition: 0.3s ease; display: flex; flex-direction: column; cursor: pointer;
         }
-        .card-summary:hover { transform: translateY(-5px); border-color: #3b82f6; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-        .card-img { h-height: 12rem; background-size: cover; background-position: center; }
-        .card-body { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
-        
+        .card-summary:hover { transform: translateY(-8px); border-color: var(--blue-patriani); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .card-header-img { height: 190px; background-size: cover; background-position: center; }
+        .card-body { padding: 24px; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-badge-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .badge-construtora { font-size: 8px; font-weight: 900; color: var(--blue-patriani); background: #eff6ff; padding: 4px 8px; rounded: 99px; text-transform: uppercase; }
+        .badge-unid { color: var(--slate-400); font-size: 10px; font-weight: 700; }
+        .card-title { font-size: 18px; font-weight: 800; color: var(--slate-800); margin-bottom: 4px; }
+        .card-city { font-size: 10px; font-weight: 600; color: var(--slate-400); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+        .card-info-divider { border-top: 1px solid var(--slate-50); padding-top: 16px; margin-top: auto; }
+        .info-label { font-size: 8px; font-weight: 700; color: var(--slate-300); text-transform: uppercase; margin-bottom: 4px; }
+        .info-value { font-size: 13px; font-weight: 700; color: var(--slate-600); }
+        .price-value { font-size: 14px; font-weight: 800; color: var(--slate-800); }
+
+        /* --- MODO TABELA (DETALHES DO EMPREENDIMENTO) --- */
+        .table-view { background: white; border-radius: 2rem; border: 1px solid var(--slate-100); overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .table-header { padding: 25px 30px; display: flex; justify-content: space-between; align-items: center; background: #fafafa; border-bottom: 1px solid var(--slate-50); }
+        .table-header h2 { font-size: 20px; font-weight: 800; color: var(--slate-800); text-transform: uppercase; }
+        .btn-back { color: var(--blue-patriani); font-size: 10px; font-weight: 900; text-transform: uppercase; cursor: pointer; background: none; border: none; }
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 700px; }
+        th { background: var(--slate-50); padding: 20px; text-align: left; font-size: 10px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; letter-spacing: 1px; }
+        td { padding: 20px; border-bottom: 1px solid var(--slate-50); font-size: 14px; }
+        tr:hover td { background: var(--slate-50); cursor: pointer; }
+        .btn-ver-ficha { background: var(--slate-100); color: var(--slate-400); font-size: 10px; font-weight: 900; padding: 6px 12px; border-radius: 8px; text-transform: uppercase; }
+
         /* --- MODAL --- */
-        .modal-blur { 
-            backdrop-filter: blur(12px); background-color: rgba(15, 23, 42, 0.7); 
-            position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem;
+        .modal-overlay { 
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(8px);
+            z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px;
         }
-        .modal-content { 
-            background: white; width: 100%; max-width: 1024px; max-height: 90vh; 
-            overflow: hidden; border-radius: 2.5rem; position: relative; 
+        .modal-container { 
+            background: white; width: 100%; max-width: 1000px; max-height: 90vh; 
+            border-radius: 2.5rem; overflow: hidden; position: relative; display: flex;
         }
-        .hidden { display: none; }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: var(--slate-100); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; z-index: 10; }
+        .modal-body { display: grid; grid-template-columns: 1fr 1fr; width: 100%; overflow-y: auto; }
+        .modal-img-side { background: var(--slate-50); padding: 40px; display: flex; flex-direction: column; justify-content: center; }
+        .modal-img { width: 100%; height: 350px; object-fit: cover; border-radius: 2rem; box-shadow: 0 20px 40px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .modal-info-side { padding: 50px; display: flex; flex-direction: column; justify-content: center; }
+        .badge-revenda { font-size: 10px; font-weight: 900; color: var(--blue-patriani); text-transform: uppercase; letter-spacing: 2px; }
+        .modal-price { font-size: 42px; font-weight: 900; color: var(--slate-900); margin: 15px 0 5px; }
+        .modal-m2 { font-size: 12px; color: var(--slate-400); font-weight: 600; text-transform: uppercase; margin-bottom: 30px; }
+        .modal-grid-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .stat-item { background: var(--slate-50); padding: 15px; border-radius: 1.25rem; border: 1px solid var(--slate-100); }
+        .stat-label { font-size: 9px; font-weight: 700; color: var(--slate-300); text-transform: uppercase; }
+        .stat-val { font-size: 18px; font-weight: 900; color: var(--slate-700); }
+        .btn-whatsapp { 
+            background: var(--green-whatsapp); color: white; text-decoration: none; display: flex; 
+            align-items: center; justify-content: center; padding: 20px; border-radius: 1.25rem;
+            font-weight: 900; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; transition: 0.3s;
+        }
+        .btn-whatsapp:hover { opacity: 0.9; transform: scale(1.02); }
 
-        /* --- TABELA --- */
-        .table-container { background: white; border-radius: 2rem; border: 1px solid var(--slate-100); overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th { background: var(--slate-50); padding: 1.5rem; font-size: 0.6rem; color: var(--slate-400); text-transform: uppercase; }
-        td { padding: 1.5rem; border-bottom: 1px solid var(--slate-50); }
-        tr:hover td { background-color: var(--slate-100) !important; cursor: pointer; }
+        /* --- RESPONSIVIDADE MOBILE --- */
+        @media (max-width: 992px) {
+            .modal-body { grid-template-columns: 1fr; }
+            .modal-img-side { padding: 30px; padding-top: 60px; }
+            .modal-info-side { padding: 30px; }
+            .modal-img { height: 250px; }
+        }
 
-        /* --- MOBILE --- */
         @media (max-width: 768px) {
-            .hero-title { font-size: 2.5rem; }
-            .search-box { grid-template-columns: 1fr; margin-left: 1rem; margin-right: 1rem; }
-            .filter-select, .btn-reset { grid-column: span 12; }
             .hero-section { min-height: 400px; text-align: center; }
+            .hero-divider { margin: 0 auto 1.5rem; }
+            .filters-container { grid-template-columns: 1fr; gap: 10px; padding: 20px; }
+            .filter-select, .btn-reset { grid-column: span 1; }
+            .navbar .container { flex-direction: column; gap: 15px; }
+            .modal-price { font-size: 32px; }
         }
+
+        .hidden { display: none !important; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: var(--slate-200); border-radius: 10px; }
     </style>
 </head>
 <body>
 
 <nav class="navbar">
     <div class="container">
-        <img src="https://sotereimoveis.com.br/wp-content/themes/itm/assets/img/logo/logo-sotere-dark.svg" alt="Sotere Logo" style="height: 40px; filter: brightness(0) invert(1);">
+        <img src="https://sotereimoveis.com.br/wp-content/themes/itm/assets/img/logo/logo-sotere-dark.svg" alt="Sotere Logo" class="nav-logo">
         <div class="status-badge">
             <span class="pulse-dot"></span>
-            <span id="total-geral" style="color: white; font-weight: bold; font-size: 12px; text-transform: uppercase;">Carregando...</span>
+            <span id="total-geral">Carregando estoque...</span>
         </div>
     </div>
 </nav>
 
 <section class="hero-section">
     <div class="container">
-        <div style="max-width: 768px;">
-            <h1 class="hero-title">Portal de Revendas <span>Patriani</span></h1>
+        <div class="hero-content">
+            <h1>Portal de Revendas <br><span>Patriani</span></h1>
             <div class="hero-divider"></div>
-            <p class="hero-subtitle">
-                Oportunidades exclusivas com <br>
-                <strong style="font-weight: 800; border-bottom: 2px solid #3b82f6;">gestão estratégica e curadoria da Sotere.</strong>
-            </p>
+            <p>Oportunidades exclusivas com gestão estratégica <br>e curadoria da <strong>Sotere Imóveis</strong>.</p>
         </div>
     </div>
 </section>
 
 <main class="container">
-    <section class="search-box">
-        <div class="input-group">
-            <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." class="input-main">
+    <div class="filters-wrapper">
+        <section class="filters-container">
+            <div class="search-group">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." class="search-input">
+            </div>
+            
+            <select id="filtra-empreendimento" onchange="aplicarFiltros()" class="filter-select">
+                <option value="">Empreendimento</option>
+            </select>
+
+            <select id="filtro-construtora" onchange="aplicarFiltros()" class="filter-select">
+                <option value="">Construtora</option>
+            </select>
+
+            <select id="filtro-cidade" onchange="aplicarFiltros()" class="filter-select">
+                <option value="">Cidade</option>
+            </select>
+
+            <button onclick="resetarVista()" class="btn-reset">Limpar Filtros</button>
+        </section>
+    </div>
+
+    <div id="view-container" class="view-grid">
         </div>
-        
-        <select id="filtra-empreendimento" onchange="aplicarFiltros()" class="filter-select">
-            <option value="">Empreendimento</option>
-        </select>
-
-        <select id="filtro-construtora" onchange="aplicarFiltros()" class="filter-select">
-            <option value="">Construtora</option>
-        </select>
-
-        <select id="filtro-cidade" onchange="aplicarFiltros()" class="filter-select">
-            <option value="">Cidade</option>
-        </select>
-
-        <button onclick="resetarVista()" class="btn-reset">Limpar Filtros</button>
-    </section>
-
-    <div id="view-container" class="grid-layout"></div>
 </main>
 
-<script>
-    // ... [Seu código JavaScript original aqui] ...
-</script>
+<div id="modal-detalhes" class="modal-overlay hidden">
+    <div class="modal-container">
+        <button onclick="fecharModal()" class="modal-close">
+            <svg style="width:20px; height:20px; margin: 10px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div id="conteudo-modal" class="modal-body custom-scroll">
+            </div>
+    </div>
+</div>
 
+<script>
+    // --- CONFIGURAÇÃO DO CSV ---
+    const LINK_CSV = 'SUA_URL_DO_CSV_AQUI'; // <--- COLE SUA URL DO GOOGLE SHEETS AQUI
+    let todosImoveis = [];
+
+    function carregarDados() {
+        Papa.parse(LINK_CSV, {
+            download: true, header: true, skipEmptyLines: true,
+            complete: function(r) {
+                todosImoveis = r.data.filter(i => i.Empreendimento);
+                document.getElementById('total-geral').innerText = `${todosImoveis.length} Unidades em Estoque`;
+                popularFiltros();
+                renderizarSumario(todosImoveis);
+            }
+        });
+    }
+
+    function popularFiltros() {
+        const fEmp = document.getElementById('filtra-empreendimento');
+        const fCons = document.getElementById('filtro-construtora');
+        const fCid = document.getElementById('filtro-cidade');
+
+        const nomes = [...new Set(todosImoveis.map(i => i.Empreendimento))].sort();
+        const construtoras = [...new Set(todosImoveis.map(i => i.Construtora))].sort();
+        const cidades = [...new Set(todosImoveis.map(i => i.Cidade))].sort();
+
+        nomes.forEach(n => fEmp.innerHTML += `<option value="${n}">${n}</option>`);
+        construtoras.forEach(c => fCons.innerHTML += `<option value="${c}">${c}</option>`);
+        cidades.forEach(cid => fCid.innerHTML += `<option value="${cid}">${cid}</option>`);
+    }
+
+    function formatarNumero(str) {
+        if (!str || str.trim() === "" || str.includes("---")) return null;
+        const num = parseFloat(str.replace(/[^\d]/g, '')) / 100;
+        return isNaN(num) ? null : num;
+    }
+
+    function renderizarSumario(items) {
+        const container = document.getElementById('view-container');
+        container.className = "view-grid";
+        
+        const agrupado = items.reduce((acc, curr) => {
+            if (!acc[curr.Empreendimento]) {
+                acc[curr.Empreendimento] = {
+                    nome: curr.Empreendimento,
+                    construtora: curr.Construtora,
+                    cidade: curr.Cidade,
+                    foto: curr['Foto Empreendimento'],
+                    precos: [],
+                    plantas: new Set(),
+                    total: 0
+                };
+            }
+            const valor = formatarNumero(curr['Valor Total']);
+            if (valor !== null) acc[curr.Empreendimento].precos.push(valor);
+            if (curr.Metragem) acc[curr.Empreendimento].plantas.add(curr.Metragem + 'm²');
+            acc[curr.Empreendimento].total++;
+            return acc;
+        }, {});
+
+        container.innerHTML = Object.values(agrupado).map(p => {
+            const temPreco = p.precos.length > 0;
+            const min = temPreco ? Math.min(...p.precos).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : "Sob Consulta";
+            const max = temPreco ? Math.max(...p.precos).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : "";
+            const faixa = (max && max !== min) ? `${min} a ${max}` : min;
+
+            return `
+            <div class="card-summary" onclick="verUnidades('${p.nome}')">
+                <div class="card-header-img" style="background-image: url('${p.foto}')"></div>
+                <div class="card-body">
+                    <div class="card-badge-row">
+                        <span class="badge-construtora">${p.construtora}</span>
+                        <span class="badge-unid">${p.total} Unid.</span>
+                    </div>
+                    <h3 class="card-title">${p.nome}</h3>
+                    <p class="card-city">${p.cidade}</p>
+                    <div class="card-info-divider">
+                        <div>
+                            <p class="info-label">Plantas</p>
+                            <p class="info-value">${Array.from(p.plantas).sort().join(' | ')}</p>
+                        </div>
+                        <div style="margin-top: 12px;">
+                            <p class="info-label">Valor Total</p>
+                            <p class="price-value">${faixa}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function verUnidades(nome) {
+        const filtrados = todosImoveis.filter(i => i.Empreendimento === nome);
+        const container = document.getElementById('view-container');
+        container.className = "table-view";
+        container.innerHTML = `
+            <div class="table-header">
+                <h2>${nome}</h2>
+                <button onclick="resetarVista()" class="btn-back">← Voltar</button>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Unidade</th>
+                            <th>Andar</th>
+                            <th>Planta</th>
+                            <th>Previsão</th>
+                            <th>Valor Total</th>
+                            <th style="text-align:center">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filtrados.map(i => `
+                            <tr onclick='abrirFicha(${JSON.stringify(i).replace(/'/g, "&apos;")})'>
+                                <td style="font-weight:bold">${i.Unidade}</td>
+                                <td>${i.Andar}º</td>
+                                <td>${i.Metragem}m²</td>
+                                <td>${i['Previsão Entrega'] || i.Status}</td>
+                                <td style="font-weight:800; color:var(--blue-patriani)">${i['Valor Total']}</td>
+                                <td style="text-align:center"><span class="btn-ver-ficha">Ver</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>`;
+        window.scrollTo({ top: 450, behavior: 'smooth' });
+    }
+
+    function abrirFicha(item) {
+        const modal = document.getElementById('modal-detalhes');
+        const conteudo = document.getElementById('conteudo-modal');
+        const whatsMsg = encodeURIComponent(`Olá! Tenho interesse na unidade ${item.Unidade} do ${item.Empreendimento}. Vi no portal.`);
+
+        conteudo.innerHTML = `
+            <div class="modal-img-side">
+                <img src="${item['Foto Unidade']}" class="modal-img" onerror="this.src='https://via.placeholder.com/600x400?text=Imagem+Indisponível'">
+                <h2 style="font-size: 28px; font-weight: 900; color: var(--slate-900)">${item.Empreendimento}</h2>
+                <p style="color: var(--slate-500); font-weight: 500;">${item['Endereço'] || 'Consulte localização'}</p>
+            </div>
+            <div class="modal-info-side">
+                <span class="badge-revenda">Revenda Disponível</span>
+                <h3 class="modal-price">${item['Valor Total']}</h3>
+                <p class="modal-m2">m²: ${item['m²'] || 'Sob Consulta'}</p>
+                
+                <div class="modal-grid-stats">
+                    <div class="stat-item">
+                        <p class="stat-label">Unid/Andar</p>
+                        <p class="stat-val">${item.Unidade} (${item.Andar}º)</p>
+                    </div>
+                    <div class="stat-item">
+                        <p class="stat-label">Metragem</p>
+                        <p class="stat-val">${item.Metragem}m²</p>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid var(--slate-100); padding-top: 25px; margin-bottom: 30px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div>
+                        <p class="stat-label">Ato Previsto</p>
+                        <p style="font-size: 20px; font-weight: 900; color: #059669;">${item.Ato || 'Consultar'}</p>
+                    </div>
+                    <div>
+                        <p class="stat-label">Fluxo Restante</p>
+                        <p style="font-size: 20px; font-weight: 900; color: var(--blue-patriani);">${item.Entrega || 'Consultar'}</p>
+                    </div>
+                </div>
+                
+                <a href="https://wa.me/5511991183368?text=${whatsMsg}" target="_blank" class="btn-whatsapp">
+                    Falar com Especialista
+                </a>
+            </div>`;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModal() {
+        document.getElementById('modal-detalhes').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    function aplicarFiltros() {
+        const busca = document.getElementById('busca-global').value.toLowerCase();
+        const selEmp = document.getElementById('filtra-empreendimento').value;
+        const selCons = document.getElementById('filtro-construtora').value;
+        const selCid = document.getElementById('filtro-cidade').value;
+
+        const filtrados = todosImoveis.filter(i => {
+            const matchesBusca = !busca || (i.Empreendimento + i.Cidade + i.Construtora).toLowerCase().includes(busca);
+            const matchesEmp = !selEmp || i.Empreendimento === selEmp;
+            const matchesCons = !selCons || i.Construtora === selCons;
+            const matchesCid = !selCid || i.Cidade === selCid;
+            return matchesBusca && matchesEmp && matchesCons && matchesCid;
+        });
+
+        if (selEmp) verUnidades(selEmp);
+        else renderizarSumario(filtrados);
+    }
+
+    function resetarVista() {
+        document.getElementById('busca-global').value = "";
+        document.getElementById('filtra-empreendimento').value = "";
+        document.getElementById('filtro-construtora').value = "";
+        document.getElementById('filtro-cidade').value = "";
+        renderizarSumario(todosImoveis);
+    }
+
+    carregarDados();
+</script>
 </body>
 </html>
