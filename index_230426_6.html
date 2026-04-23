@@ -40,12 +40,6 @@
         
         .modal-blur { backdrop-filter: blur(12px); background-color: rgba(15, 23, 42, 0.7); }
         
-        /* AJUSTE ÚNICO: Permite scroll no modal para não cortar no mobile */
-        #conteudo-modal {
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
         .custom-scrollbar::-webkit-scrollbar { width: 5px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
@@ -85,7 +79,7 @@
     <section class="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 shadow-2xl space-y-6 mb-10">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-6 relative">
-                <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." class="w-full bg-slate-50 border border-slate-200 text-slate-600 text-sm rounded-2xl p-4 pl-12 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." class="w-full bg-slate-50 border border-slate-200 text-slate-600 text-sm rounded-2xl p-4 pl-12 focus:outline-none">
                 <svg class="w-5 h-5 text-slate-400 absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2"></path></svg>
             </div>
             <div class="md:col-span-2">
@@ -111,10 +105,10 @@
 
 <div id="modal-detalhes" class="hidden fixed inset-0 z-[60] modal-blur flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-[2rem] md:rounded-[2.5rem] shadow-2xl relative">
-        <button onclick="fecharModal()" class="absolute top-4 right-4 z-50 bg-white/80 backdrop-blur rounded-full p-2 shadow-sm hover:bg-white transition">
+        <button onclick="fecharModal()" class="absolute top-4 right-4 z-50 bg-white/80 backdrop-blur rounded-full p-2 shadow-sm">
             <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-width="2"></path></svg>
         </button>
-        <div id="conteudo-modal" class="custom-scrollbar h-full"></div>
+        <div id="conteudo-modal" class="custom-scrollbar h-full overflow-y-auto"></div>
     </div>
 </div>
 
@@ -173,7 +167,7 @@
         container.innerHTML = Object.values(agrupado).map(p => `
             <div class="card-summary" onclick="verUnidades('${p.nome}')">
                 <div class="h-48 bg-cover bg-center" style="background-image: url('${p.foto}')"></div>
-                <div class="p-6 flex flex-col flex-grow">
+                <div class="p-6">
                     <span class="text-[9px] font-black text-blue-600 uppercase mb-2 block">${p.construtora}</span>
                     <h3 class="text-lg font-extrabold text-slate-800 uppercase leading-tight">${p.nome}</h3>
                     <p class="text-slate-400 text-[10px] font-medium uppercase mt-2">${p.cidade} • ${p.total} unidades</p>
@@ -191,14 +185,9 @@
                 <button onclick="carregarDados()" class="text-blue-600 text-[10px] font-black uppercase tracking-widest">← Voltar</button>
             </div>
             <div class="overflow-x-auto">
-                <table class="w-full text-left min-w-[600px]">
+                <table class="w-full text-left">
                     <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase border-b">
-                        <tr>
-                            <th class="p-6">Unidade</th>
-                            <th class="p-6">Andar</th>
-                            <th class="p-6">Valor Total</th>
-                            <th class="p-6 text-center">Ficha</th>
-                        </tr>
+                        <tr><th class="p-6">Unidade</th><th class="p-6">Andar</th><th class="p-6">Valor Total</th><th class="p-6 text-center">Ficha</th></tr>
                     </thead>
                     <tbody>
                         ${filtrados.map(i => `
@@ -206,9 +195,7 @@
                                 <td class="p-6 font-bold text-slate-700">${i.Unidade}</td>
                                 <td class="p-6 text-slate-500">${i.Andar}º</td>
                                 <td class="p-6 font-black text-blue-600">${i['Valor Total']}</td>
-                                <td class="p-6 text-center">
-                                    <span class="bg-slate-100 text-[10px] font-black px-3 py-1 rounded-lg">VER</span>
-                                </td>
+                                <td class="p-6 text-center"><span class="bg-slate-100 text-[10px] font-black px-3 py-1 rounded-lg">VER</span></td>
                             </tr>`).join('')}
                     </tbody>
                 </table>
@@ -228,9 +215,9 @@
                 <div class="p-8 md:p-12 flex flex-col justify-between">
                     <div>
                         <span class="text-blue-500 font-black uppercase text-[10px] tracking-widest">Revenda Disponível</span>
-                        <h2 class="text-3xl md:text-4xl font-black text-slate-900 uppercase mt-2 mb-6">${item.Empreendimento}</h2>
+                        <h2 class="text-3xl font-black text-slate-900 uppercase mt-2">${item.Empreendimento}</h2>
                         
-                        <div class="grid grid-cols-2 gap-4 mb-8">
+                        <div class="grid grid-cols-2 gap-4 mt-8 mb-8">
                             <div class="bg-slate-50 p-4 rounded-2xl">
                                 <p class="text-[9px] font-bold text-slate-400 uppercase">Unidade</p>
                                 <p class="text-xl font-black text-slate-800">${item.Unidade} (${item.Andar}º)</p>
@@ -243,11 +230,11 @@
 
                         <div class="space-y-6">
                             <div>
-                                <p class="text-[9px] font-bold text-slate-400 uppercase">Valor de Revenda</p>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase">Valor Total</p>
                                 <p class="text-4xl font-black text-blue-600">${item['Valor Total']}</p>
                             </div>
                             
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-slate-100">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t">
                                 <div class="bg-slate-50 p-4 rounded-2xl">
                                     <p class="text-[9px] font-bold text-slate-400 uppercase">Ato / Entrada</p>
                                     <p class="text-lg font-bold text-emerald-600">${item.Ato || 'Sob Consulta'}</p>
@@ -261,8 +248,7 @@
                     </div>
                     
                     <div class="mt-8">
-                        <a href="https://wa.me/5511991183368?text=${whatsMsg}" target="_blank" 
-                           class="flex items-center justify-center w-full py-5 bg-[#25D366] text-white rounded-2xl font-black uppercase tracking-widest hover:opacity-90 transition">
+                        <a href="https://wa.me/5511991183368?text=${whatsMsg}" target="_blank" class="flex items-center justify-center w-full py-5 bg-[#25D366] text-white rounded-2xl font-black uppercase tracking-widest hover:opacity-90 transition">
                            Agendar Visita / Detalhes
                         </a>
                     </div>
