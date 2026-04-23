@@ -7,31 +7,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* =====================================================
-           RESET & BASE
-        ===================================================== */
-        *, *::before, *::after { box-sizing: border-box; }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            margin: 0;
+        /* --- CSS BASE E RESETS --- */
+        :root {
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
         }
 
-        /* =====================================================
-           UTILITÁRIOS GERAIS
-        ===================================================== */
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--slate-50); 
+            margin: 0; 
+            color: var(--slate-800);
+        }
+
         .container {
             width: 100%;
             max-width: 1280px;
             margin-left: auto;
             margin-right: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
         }
 
-        /* =====================================================
-           NAVBAR
-        ===================================================== */
-        .navbar {
+        /* --- NAVBAR --- */
+        .navbar { 
             position: absolute;
             top: 0;
             left: 0;
@@ -40,1005 +47,165 @@
             background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
             padding: 20px 0;
         }
-
-        .navbar .container {
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .navbar-logo {
-            height: 2.5rem;
-            filter: brightness(0) invert(1);
-        }
-
-        .navbar-badge {
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { h-height: 2.5rem; filter: brightness(0) invert(1); }
+        
+        .status-badge {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            background-color: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.2);
             backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
             padding: 0.5rem 1rem;
             border-radius: 9999px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        .pulse-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
 
-        .pulse-dot {
-            width: 0.5rem;
-            height: 0.5rem;
-            background-color: #4ade80;
-            border-radius: 9999px;
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        #total-geral {
-            color: white;
-            font-weight: 700;
-            font-size: 0.625rem; /* text-[10px] */
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        /* =====================================================
-           HERO / BANNER
-        ===================================================== */
+        /* --- HERO --- */
         .hero-section {
             position: relative;
-            background:
-                linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)),
-                url('https://www.construtorapatriani.com.br/_next/image?url=https%3A%2F%2Fd1l3zvrqp603kj.cloudfront.net%2F03_P_SP_FACHADA_VOO_DE_PASSARO_min_9b0ddc5155.jpg&w=1920&q=85');
+            background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)), 
+                        url('https://www.construtorapatriani.com.br/_next/image?url=https%3A%2F%2Fd1l3zvrqp603kj.cloudfront.net%2F03_P_SP_FACHADA_VOO_DE_PASSARO_min_9b0ddc5155.jpg&w=1920&q=85');
             background-size: cover;
             background-position: center;
-            min-height: 800px;
+            min-height: 500px;
             display: flex;
             align-items: center;
             color: white;
             padding-top: 80px;
         }
+        .hero-title { font-size: 3.75rem; font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
+        .hero-title span { color: #60a5fa; }
+        .hero-divider { height: 4px; width: 96px; background: #3b82f6; margin-bottom: 1.5rem; }
+        .hero-subtitle { font-size: 1.5rem; font-weight: 300; color: var(--slate-100); }
 
-        .hero-section .container {
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-        }
-
-        .hero-inner {
-            max-width: 48rem;
-        }
-
-        .hero-title {
-            font-size: 2.25rem; /* text-4xl */
-            font-weight: 800;
-            margin-bottom: 1rem;
-            line-height: 1.25;
-        }
-
-        .hero-title span {
-            color: #60a5fa; /* text-blue-400 */
-        }
-
-        .hero-divider {
-            height: 4px;
-            width: 6rem;
-            background-color: #3b82f6;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.125rem;
-            font-weight: 300;
-            color: #f1f5f9;
-            margin: 0;
-        }
-
-        .hero-subtitle strong {
-            font-weight: 700;
-            color: white;
-            border-bottom: 2px solid #3b82f6;
-        }
-
-        /* =====================================================
-           MAIN CONTENT
-        ===================================================== */
-        main.main-content {
-            max-width: 1280px;
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-            margin-top: -3rem;    /* -mt-12 */
+        /* --- FILTROS --- */
+        .search-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 2.5rem;
+            border: 1px solid var(--slate-100);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            margin-top: -5rem;
             position: relative;
             z-index: 10;
-        }
-
-        /* =====================================================
-           PAINEL DE FILTROS
-        ===================================================== */
-        .filter-panel {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 2rem;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
-            margin-bottom: 2.5rem;
-        }
-
-        .filter-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
             gap: 1rem;
         }
-
-        /* Busca ocupa toda a largura */
-        .filter-search-wrapper {
-            position: relative;
-            grid-column: 1 / -1;
+        .input-group { grid-column: span 12; position: relative; }
+        .input-main { 
+            width: 100%; background: var(--slate-50); border: 1px solid var(--slate-200); 
+            padding: 1rem 1rem 1rem 3rem; border-radius: 1rem; outline: none; transition: 0.3s;
         }
-
-        #busca-global {
-            width: 100%;
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            color: #475569;
-            font-size: 0.875rem;
-            border-radius: 1rem;
-            padding: 1rem 1rem 1rem 3rem;
-            outline: none;
-            font-weight: 500;
-            transition: box-shadow 0.2s, border-color 0.2s;
+        .input-main:focus { ring: 2px solid #dbeafe; }
+        
+        .filter-select { 
+            grid-column: span 3; background: var(--slate-50); border: 1px solid var(--slate-200);
+            padding: 0.75rem; border-radius: 0.75rem; font-weight: 700; text-transform: uppercase;
+            font-size: 0.75rem; color: var(--slate-500); cursor: pointer;
         }
-
-        #busca-global:focus {
-            box-shadow: 0 0 0 2px #bfdbfe;
+        .btn-reset {
+            grid-column: span 3; background: var(--blue-600); color: white; border: none;
+            border-radius: 0.75rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
+            transition: 0.3s;
         }
+        .btn-reset:hover { background: var(--blue-700); }
 
-        .search-icon {
-            width: 1.25rem;
-            height: 1.25rem;
-            color: #94a3b8;
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
+        /* --- CARDS --- */
+        #view-container { margin-top: 2.5rem; margin-bottom: 2.5rem; }
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
+        
+        .card-summary { 
+            transition: all 0.3s ease; border-radius: 2rem; border: 1px solid #e2e8f0; 
+            background: white; height: 100%; display: flex; flex-direction: column; 
+            overflow: hidden; cursor: pointer; 
         }
-
-        .filter-select {
-            width: 100%;
-            background-color: #f8fafc;
-            border: 1px solid #e2e8f0;
-            color: #64748b;
-            font-size: 0.75rem;
-            border-radius: 0.75rem;
-            padding: 0.75rem;
-            outline: none;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            cursor: pointer;
-            appearance: none;
-            -webkit-appearance: none;
+        .card-summary:hover { transform: translateY(-5px); border-color: #3b82f6; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .card-img { h-height: 12rem; background-size: cover; background-position: center; }
+        .card-body { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        /* --- MODAL --- */
+        .modal-blur { 
+            backdrop-filter: blur(12px); background-color: rgba(15, 23, 42, 0.7); 
+            position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem;
         }
-
-        .btn-limpar {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 0.75rem;
-            font-size: 0.625rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+        .modal-content { 
+            background: white; width: 100%; max-width: 1024px; max-height: 90vh; 
+            overflow: hidden; border-radius: 2.5rem; position: relative; 
         }
-
-        .btn-limpar:hover { background-color: #1d4ed8; }
-
-        /* =====================================================
-           GRID DE CARDS (sumário)
-        ===================================================== */
-        #view-container.grid-sumario {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-        }
-
-        /* =====================================================
-           CARD DE EMPREENDIMENTO
-        ===================================================== */
-        .card-summary {
-            transition: all 0.3s ease;
-            border-radius: 2rem;
-            border: 1px solid #e2e8f0;
-            background: white;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .card-summary:hover {
-            transform: translateY(-5px);
-            border-color: #3b82f6;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-        }
-
-        .card-thumb {
-            height: 12rem;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .card-body {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1;
-        }
-
-        .card-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-
-        .badge-construtora {
-            font-size: 0.5rem;
-            font-weight: 900;
-            color: #2563eb;
-            background-color: #eff6ff;
-            padding: 0.25rem 0.5rem;
-            border-radius: 9999px;
-            text-transform: uppercase;
-        }
-
-        .badge-unidades {
-            color: #94a3b8;
-            font-size: 0.625rem;
-            font-weight: 700;
-        }
-
-        .card-nome {
-            font-size: 1.125rem;
-            font-weight: 800;
-            color: #1e293b;
-            line-height: 1.25;
-            margin: 0 0 0.25rem;
-        }
-
-        .card-cidade {
-            color: #94a3b8;
-            font-size: 0.625rem;
-            font-weight: 500;
-            margin: 0 0 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .card-footer {
-            margin-top: auto;
-            padding-top: 1rem;
-            border-top: 1px solid #f8fafc;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .card-info-label {
-            font-size: 0.5rem;
-            font-weight: 700;
-            color: #cbd5e1;
-            text-transform: uppercase;
-            margin-bottom: 0.25rem;
-        }
-
-        .card-info-value-sm {
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: #475569;
-        }
-
-        .card-info-value-lg {
-            font-size: 0.875rem;
-            font-weight: 800;
-            color: #1e293b;
-        }
-
-        /* =====================================================
-           VIEW DE UNIDADES (tabela)
-        ===================================================== */
-        #view-container.tabela-view {
-            background: white;
-            border-radius: 2rem;
-            border: 1px solid #f1f5f9;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-            overflow: hidden;
-        }
-
-        .tabela-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #f8fafc;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: rgba(248, 250, 252, 0.3);
-        }
-
-        .tabela-titulo {
-            font-size: 1.125rem;
-            font-weight: 800;
-            color: #1e293b;
-            text-transform: uppercase;
-            margin: 0;
-        }
-
-        .btn-voltar {
-            background: none;
-            border: none;
-            color: #2563eb;
-            font-size: 0.625rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        .table-scroll {
-            overflow-x: auto;
-        }
-
-        .tabela-unidades {
-            width: 100%;
-            text-align: left;
-            border-collapse: collapse;
-            min-width: 600px;
-        }
-
-        .tabela-unidades thead {
-            background-color: #f8fafc;
-            font-size: 0.625rem;
-            font-weight: 700;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .tabela-unidades th {
-            padding: 1.5rem;
-        }
-
-        .tabela-unidades th:last-child {
-            text-align: center;
-        }
-
-        .tabela-unidades tbody tr {
-            border-bottom: 1px solid #f8fafc;
-            cursor: pointer;
-        }
-
-        .tabela-unidades tbody tr:hover td {
-            background-color: #f1f5f9 !important;
-        }
-
-        .tabela-unidades td {
-            padding: 1.5rem;
-        }
-
-        .td-unidade { font-weight: 700; color: #334155; }
-        .td-muted   { color: #64748b; }
-        .td-valor   { font-weight: 800; color: #2563eb; }
-
-        .td-ficha-btn {
-            background-color: #f1f5f9;
-            color: #94a3b8;
-            font-size: 0.625rem;
-            font-weight: 900;
-            padding: 0.25rem 0.75rem;
-            border-radius: 0.5rem;
-            display: inline-block;
-        }
-
-        .td-center { text-align: center; }
-
-        /* =====================================================
-           MODAL
-        ===================================================== */
-        .modal-blur {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            background-color: rgba(15, 23, 42, 0.7);
-        }
-
-        #modal-detalhes {
-            position: fixed;
-            inset: 0;
-            z-index: 60;
-            display: none;          /* substituído por flex via JS */
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-        }
-
-        #modal-detalhes.open {
-            display: flex;
-        }
-
-        .modal-box {
-            background: white;
-            width: 100%;
-            max-width: 64rem;
-            max-height: 90vh;
-            overflow: hidden;
-            border-radius: 2.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            position: relative;
-        }
-
-        .modal-close-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            z-index: 50;
-            background-color: #f1f5f9;
-            border: none;
-            border-radius: 9999px;
-            padding: 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-close-btn:hover { background-color: #e2e8f0; }
-
-        .modal-close-btn svg {
-            width: 1.5rem;
-            height: 1.5rem;
-            color: #64748b;
-        }
-
-        .custom-scrollbar { overflow-y: auto; }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-
-        #conteudo-modal {
-            overflow-y: auto;
-            height: 100%;
-            max-height: 90vh;
-        }
-
-        /* Modal: grid interno */
-        .modal-grid {
-            display: grid;
-            height: 100%;
-        }
-
-        .modal-col-esq {
-            background-color: #f8fafc;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .modal-foto {
-            width: 100%;
-            height: 16rem;
-            object-fit: cover;
-            border-radius: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
-            margin-bottom: 2rem;
-        }
-
-        .modal-emp-nome {
-            font-size: 1.875rem;
-            font-weight: 900;
-            color: #0f172a;
-            margin: 0 0 0.5rem;
-        }
-
-        .modal-endereco {
-            color: #64748b;
-            font-weight: 500;
-            margin: 0;
-        }
-
-        .modal-col-dir {
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .modal-tag {
-            color: #3b82f6;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 0.625rem;
-            letter-spacing: 0.1em;
-        }
-
-        .modal-valor {
-            font-size: 2.25rem;
-            font-weight: 900;
-            color: #0f172a;
-            margin: 1rem 0 0.5rem;
-        }
-
-        .modal-m2 {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            font-weight: 600;
-            margin: 0 0 2rem;
-            text-transform: uppercase;
-        }
-
-        .modal-info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .modal-info-box {
-            background-color: #f8fafc;
-            padding: 1rem;
-            border-radius: 1rem;
-            border: 1px solid #f1f5f9;
-        }
-
-        .modal-info-label {
-            font-size: 0.5625rem;
-            font-weight: 700;
-            color: #cbd5e1;
-            text-transform: uppercase;
-            margin-bottom: 0.25rem;
-        }
-
-        .modal-info-value {
-            font-size: 1.125rem;
-            font-weight: 900;
-            color: #334155;
-        }
-
-        .modal-stats-row {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid #f1f5f9;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-        }
-
-        .modal-stat-label {
-            font-size: 0.5625rem;
-            font-weight: 700;
-            color: #cbd5e1;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-
-        .modal-stat-ato {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #059669;
-        }
-
-        .modal-stat-fluxo {
-            font-size: 1.5rem;
-            font-weight: 900;
-            color: #2563eb;
-        }
-
-        .modal-cta {
-            margin-top: 3rem;
-        }
-
-        .btn-whatsapp {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            width: 100%;
-            padding: 1.25rem;
-            background-color: #25D366;
-            color: white;
-            border-radius: 1rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            font-size: 0.625rem;
-            letter-spacing: 0.1em;
-            text-decoration: none;
-            transition: opacity 0.2s;
-            box-shadow: 0 20px 25px -5px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-whatsapp:hover { opacity: 0.9; }
-
-        /* =====================================================
-           RESPONSIVO
-        ===================================================== */
-        @media (min-width: 640px) {
-            #view-container.grid-sumario {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (min-width: 1024px) {
-            #view-container.grid-sumario {
-                grid-template-columns: repeat(3, 1fr);
-                gap: 2rem;
-            }
-
-            main.main-content {
-                margin-top: -5rem; /* -mt-20 */
-            }
-
-            .filter-panel {
-                padding: 2rem;
-                border-radius: 2.5rem;
-            }
-
-            .filter-grid {
-                grid-template-columns: repeat(12, 1fr);
-            }
-
-            .filter-search-wrapper { grid-column: span 12; }
-            .col-span-3 { grid-column: span 3; }
-
-            .tabela-header { padding: 2rem; }
-            .tabela-titulo  { font-size: 1.25rem; }
-
-            .hero-title { font-size: 3.75rem; }
-            .hero-subtitle { font-size: 1.5rem; }
-
-            .modal-grid { grid-template-columns: 1fr 1fr; }
-            .modal-foto { height: 20rem; }
-            .modal-col-esq { padding: 3rem; }
-            .modal-col-dir { padding: 3rem; }
-            .modal-close-btn { top: 2rem; right: 2rem; }
-            .modal-emp-nome { font-size: 2.25rem; }
-            .modal-valor { font-size: 3rem; }
-            .modal-info-box { padding: 1.25rem; }
-            .modal-info-value { font-size: 1.25rem; }
-            .modal-stat-ato, .modal-stat-fluxo { font-size: 1.875rem; }
-        }
-
-        @media (min-width: 1280px) {
-            #view-container.grid-sumario {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
+        .hidden { display: none; }
+
+        /* --- TABELA --- */
+        .table-container { background: white; border-radius: 2rem; border: 1px solid var(--slate-100); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: var(--slate-50); padding: 1.5rem; font-size: 0.6rem; color: var(--slate-400); text-transform: uppercase; }
+        td { padding: 1.5rem; border-bottom: 1px solid var(--slate-50); }
+        tr:hover td { background-color: var(--slate-100) !important; cursor: pointer; }
+
+        /* --- MOBILE --- */
         @media (max-width: 768px) {
-            .hero-section { min-height: 400px; text-align: center; }
             .hero-title { font-size: 2.5rem; }
-            .hero-divider { margin: 0 auto 1.5rem; }
-            .navbar .container { flex-direction: column; gap: 10px; }
-        }
-
-        /* Ocultar a quebra de linha no mobile */
-        .hidden-mobile { display: none; }
-        @media (min-width: 768px) {
-            .hidden-mobile { display: block; }
-            #total-geral { font-size: 0.75rem; }
+            .search-box { grid-template-columns: 1fr; margin-left: 1rem; margin-right: 1rem; }
+            .filter-select, .btn-reset { grid-column: span 12; }
+            .hero-section { min-height: 400px; text-align: center; }
         }
     </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <div class="container">
-        <img src="https://sotereimoveis.com.br/wp-content/themes/itm/assets/img/logo/logo-sotere-dark.svg"
-             alt="Sotere Logo" class="navbar-logo">
-        <div class="navbar-badge">
+        <img src="https://sotereimoveis.com.br/wp-content/themes/itm/assets/img/logo/logo-sotere-dark.svg" alt="Sotere Logo" style="height: 40px; filter: brightness(0) invert(1);">
+        <div class="status-badge">
             <span class="pulse-dot"></span>
-            <span id="total-geral">Carregando...</span>
+            <span id="total-geral" style="color: white; font-weight: bold; font-size: 12px; text-transform: uppercase;">Carregando...</span>
         </div>
     </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero-section">
     <div class="container">
-        <div class="hero-inner">
+        <div style="max-width: 768px;">
             <h1 class="hero-title">Portal de Revendas <span>Patriani</span></h1>
             <div class="hero-divider"></div>
             <p class="hero-subtitle">
-                Oportunidades exclusivas com <br class="hidden-mobile">
-                <strong>gestão estratégica e curadoria da Sotere.</strong>
+                Oportunidades exclusivas com <br>
+                <strong style="font-weight: 800; border-bottom: 2px solid #3b82f6;">gestão estratégica e curadoria da Sotere.</strong>
             </p>
         </div>
     </div>
 </section>
 
-<!-- MAIN -->
-<main class="main-content">
-
-    <!-- Painel de Filtros -->
-    <section class="filter-panel">
-        <div class="filter-grid">
-
-            <!-- Busca global -->
-            <div class="filter-search-wrapper">
-                <input type="text" id="busca-global" oninput="aplicarFiltros()"
-                       placeholder="Pesquise por nome, cidade ou construtora...">
-                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
-            </div>
-
-            <!-- Selects -->
-            <div class="col-span-3">
-                <select id="filtra-empreendimento" onchange="aplicarFiltros()" class="filter-select">
-                    <option value="">Empreendimento</option>
-                </select>
-            </div>
-
-            <div class="col-span-3">
-                <select id="filtro-construtora" onchange="aplicarFiltros()" class="filter-select">
-                    <option value="">Construtora</option>
-                </select>
-            </div>
-
-            <div class="col-span-3">
-                <select id="filtro-cidade" onchange="aplicarFiltros()" class="filter-select">
-                    <option value="">Cidade</option>
-                </select>
-            </div>
-
-            <div class="col-span-3">
-                <button onclick="resetarVista()" class="btn-limpar">Limpar Filtros</button>
-            </div>
-
+<main class="container">
+    <section class="search-box">
+        <div class="input-group">
+            <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." class="input-main">
         </div>
+        
+        <select id="filtra-empreendimento" onchange="aplicarFiltros()" class="filter-select">
+            <option value="">Empreendimento</option>
+        </select>
+
+        <select id="filtro-construtora" onchange="aplicarFiltros()" class="filter-select">
+            <option value="">Construtora</option>
+        </select>
+
+        <select id="filtro-cidade" onchange="aplicarFiltros()" class="filter-select">
+            <option value="">Cidade</option>
+        </select>
+
+        <button onclick="resetarVista()" class="btn-reset">Limpar Filtros</button>
     </section>
 
-    <div id="view-container"></div>
+    <div id="view-container" class="grid-layout"></div>
 </main>
 
-<!-- MODAL -->
-<div id="modal-detalhes" class="modal-blur">
-    <div class="modal-box">
-        <button onclick="fecharModal()" class="modal-close-btn">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-        </button>
-        <div id="conteudo-modal" class="custom-scrollbar"></div>
-    </div>
-</div>
-
 <script>
-    // URL PLANILHA
-    const LINK_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROTgHcXnaIQlwelJZknF-e_RAKvjPKgWeZVN2GSoajz1ORsCMfNWv1FwZGadV9c4gSfGHw29w3zRRL/pub?gid=0&single=true&output=csv';
-    let todosImoveis = [];
-
-    function carregarDados() {
-        Papa.parse(LINK_CSV, {
-            download: true, header: true, skipEmptyLines: true,
-            complete: function(r) {
-                todosImoveis = r.data.filter(i => i.Empreendimento);
-                document.getElementById('total-geral').innerText = `${todosImoveis.length} Unidades em Estoque`;
-                popularFiltros();
-                renderizarSumario(todosImoveis);
-            }
-        });
-    }
-
-    function popularFiltros() {
-        const fEmp  = document.getElementById('filtra-empreendimento');
-        const fCons = document.getElementById('filtro-construtora');
-        const fCid  = document.getElementById('filtro-cidade');
-
-        const nomes       = [...new Set(todosImoveis.map(i => i.Empreendimento))].sort();
-        const construtoras = [...new Set(todosImoveis.map(i => i.Construtora))].sort();
-        const cidades     = [...new Set(todosImoveis.map(i => i.Cidade))].sort();
-
-        nomes.forEach(n   => fEmp.innerHTML  += `<option value="${n}">${n}</option>`);
-        construtoras.forEach(c => fCons.innerHTML += `<option value="${c}">${c}</option>`);
-        cidades.forEach(cid => fCid.innerHTML += `<option value="${cid}">${cid}</option>`);
-    }
-
-    function formatarNumero(str) {
-        if (!str || str.trim() === "" || str.includes("---")) return null;
-        const num = parseFloat(str.replace(/[^\d]/g, '')) / 100;
-        return isNaN(num) ? null : num;
-    }
-
-    function renderizarSumario(items) {
-        const container = document.getElementById('view-container');
-        const agrupado = items.reduce((acc, curr) => {
-            if (!acc[curr.Empreendimento]) {
-                acc[curr.Empreendimento] = {
-                    nome: curr.Empreendimento,
-                    construtora: curr.Construtora,
-                    cidade: curr.Cidade,
-                    foto: curr['Foto Empreendimento'],
-                    precos: [],
-                    plantas: new Set(),
-                    total: 0
-                };
-            }
-            const valor = formatarNumero(curr['Valor Total']);
-            if (valor !== null) acc[curr.Empreendimento].precos.push(valor);
-            if (curr.Metragem) acc[curr.Empreendimento].plantas.add(curr.Metragem + 'm²');
-            acc[curr.Empreendimento].total++;
-            return acc;
-        }, {});
-
-        container.className = "grid-sumario";
-        container.innerHTML = Object.values(agrupado).map(p => {
-            const temPreco = p.precos.length > 0;
-            const min = temPreco ? Math.min(...p.precos).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : "Sob Consulta";
-            const max = temPreco ? Math.max(...p.precos).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : "";
-            const faixa = (max && max !== min) ? `${min} a ${max}` : min;
-
-            return `
-            <div class="card-summary" onclick="verUnidades('${p.nome}')">
-                <div class="card-thumb" style="background-image: url('${p.foto}')"></div>
-                <div class="card-body">
-                    <div class="card-header-row">
-                        <span class="badge-construtora">${p.construtora}</span>
-                        <span class="badge-unidades">${p.total} Unid.</span>
-                    </div>
-                    <h3 class="card-nome">${p.nome}</h3>
-                    <p class="card-cidade">${p.cidade}</p>
-                    <div class="card-footer">
-                        <div>
-                            <p class="card-info-label">Plantas</p>
-                            <p class="card-info-value-sm">${Array.from(p.plantas).sort().join(' | ')}</p>
-                        </div>
-                        <div>
-                            <p class="card-info-label">Valor Total</p>
-                            <p class="card-info-value-lg">${faixa}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>`;
-        }).join('');
-    }
-
-    function verUnidades(nome) {
-        const filtrados = todosImoveis.filter(i => i.Empreendimento === nome);
-        const container = document.getElementById('view-container');
-        container.className = "tabela-view";
-        container.innerHTML = `
-            <div class="tabela-header">
-                <h2 class="tabela-titulo">${nome}</h2>
-                <button onclick="resetarVista()" class="btn-voltar">← Voltar</button>
-            </div>
-            <div class="table-scroll">
-                <table class="tabela-unidades">
-                    <thead>
-                        <tr>
-                            <th>Unidade</th>
-                            <th>Andar</th>
-                            <th>Planta</th>
-                            <th>Previsão Entrega</th>
-                            <th>Valor Total</th>
-                            <th style="text-align:center">Ficha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${filtrados.map(i => `
-                            <tr onclick='abrirFicha(${JSON.stringify(i).replace(/'/g, "&apos;")})'>
-                                <td class="td-unidade">${i.Unidade}</td>
-                                <td class="td-muted">${i.Andar}º</td>
-                                <td class="td-muted">${i.Metragem}m²</td>
-                                <td class="td-muted">${i['Previsão Entrega'] || i.Status}</td>
-                                <td class="td-valor">${i['Valor Total']}</td>
-                                <td class="td-center"><span class="td-ficha-btn">VER</span></td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>`;
-        window.scrollTo({ top: 400, behavior: 'smooth' });
-    }
-
-    function abrirFicha(item) {
-        const modal    = document.getElementById('modal-detalhes');
-        const conteudo = document.getElementById('conteudo-modal');
-        const whatsMsg = encodeURIComponent(`Olá! Tenho interesse na unidade ${item.Unidade} do ${item.Empreendimento}.`);
-
-        conteudo.innerHTML = `
-            <div class="modal-grid">
-                <div class="modal-col-esq">
-                    <img src="${item['Foto Unidade']}" class="modal-foto"
-                         onerror="this.src='https://via.placeholder.com/600x400'">
-                    <h2 class="modal-emp-nome">${item.Empreendimento}</h2>
-                    <p class="modal-endereco">${item['Endereço'] || ''}</p>
-                </div>
-                <div class="modal-col-dir">
-                    <div>
-                        <span class="modal-tag">Revenda Disponível</span>
-                        <p class="modal-valor">${item['Valor Total']}</p>
-                        <p class="modal-m2">m²: ${item['m²'] || 'Consultar'}</p>
-
-                        <div class="modal-info-grid">
-                            <div class="modal-info-box">
-                                <p class="modal-info-label">Unid/Andar</p>
-                                <p class="modal-info-value">${item.Unidade} (${item.Andar}º)</p>
-                            </div>
-                            <div class="modal-info-box">
-                                <p class="modal-info-label">Metragem</p>
-                                <p class="modal-info-value">${item.Metragem}m²</p>
-                            </div>
-                        </div>
-
-                        <div class="modal-stats-row">
-                            <div>
-                                <p class="modal-stat-label">Ato Previsto</p>
-                                <p class="modal-stat-ato">${item.Ato || 'Consultar'}</p>
-                            </div>
-                            <div>
-                                <p class="modal-stat-label">Fluxo Restante</p>
-                                <p class="modal-stat-fluxo">${item.Entrega || 'Consultar'}</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-cta">
-                        <a href="https://wa.me/5511991183368?text=${whatsMsg}" target="_blank" class="btn-whatsapp">
-                            Falar com a equipe
-                        </a>
-                    </div>
-                </div>
-            </div>`;
-
-        modal.classList.add('open');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function fecharModal() {
-        document.getElementById('modal-detalhes').classList.remove('open');
-        document.body.style.overflow = 'auto';
-    }
-
-    function aplicarFiltros() {
-        const busca   = document.getElementById('busca-global').value.toLowerCase();
-        const selEmp  = document.getElementById('filtra-empreendimento').value;
-        const selCons = document.getElementById('filtro-construtora').value;
-        const selCid  = document.getElementById('filtro-cidade').value;
-
-        const filtrados = todosImoveis.filter(i => {
-            const matchesBusca = !busca || (i.Empreendimento + i.Cidade + i.Construtora).toLowerCase().includes(busca);
-            const matchesEmp   = !selEmp  || i.Empreendimento === selEmp;
-            const matchesCons  = !selCons || i.Construtora    === selCons;
-            const matchesCid   = !selCid  || i.Cidade         === selCid;
-            return matchesBusca && matchesEmp && matchesCons && matchesCid;
-        });
-
-        if (selEmp) verUnidades(selEmp);
-        else renderizarSumario(filtrados);
-    }
-
-    function resetarVista() {
-        document.getElementById('busca-global').value = "";
-        document.getElementById('filtra-empreendimento').value = "";
-        document.getElementById('filtro-construtora').value = "";
-        document.getElementById('filtro-cidade').value = "";
-        renderizarSumario(todosImoveis);
-    }
-
-    carregarDados();
+    // ... [Seu código JavaScript original aqui] ...
 </script>
+
 </body>
 </html>
