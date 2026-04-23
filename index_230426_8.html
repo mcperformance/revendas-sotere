@@ -9,176 +9,113 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- VARIÁVEIS DE DESIGN --- */
+        /* --- DESIGN SYSTEM --- */
         :root {
             --blue-sotere: #004680;
-            --blue-patriani: #fb022e;
-            --blue-hover: #2563eb;
+            --brand-color: #fb022e; /* Patriani Red */
             --slate-50: #f8fafc;
             --slate-100: #f1f5f9;
             --slate-200: #e2e8f0;
-            --slate-300: #cbd5e1;
             --slate-400: #94a3b8;
-            --slate-500: #64748b;
             --slate-600: #475569;
-            --slate-700: #334155;
             --slate-800: #1e293b;
-            --slate-900: #0f172a;
             --green-whatsapp: #25D366;
         }
 
-        /* --- RESET E BASE --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background-color: var(--slate-50); 
-            color: var(--slate-800);
-            line-height: 1.5;
-            overflow-x: hidden;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--slate-50); color: var(--slate-800); line-height: 1.5; }
+        .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
 
-        .container {
-            width: 100%;
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-
-        /* --- NAVBAR FIXA --- */
+        /* --- NAVBAR & HERO --- */
         .navbar { 
-            position: sticky;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-            background-color: var(--blue-sotere);
-            padding: 12px 0;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            position: absolute; top: 0; width: 100%; z-index: 50;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+            padding: 20px 0;
         }
-        .navbar .container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .nav-logo { height: 42px; filter: brightness(0) invert(1); }
-
-        /* BADGE DE STATUS (SEM NÚMEROS) */
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .nav-logo { height: 40px; filter: brightness(0) invert(1); }
+        
         .status-badge {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 6px 12px;
-            border-radius: 99px;
-            margin-right: 15px;
+            display: flex; align-items: center; gap: 8px;
+            background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px);
+            padding: 8px 16px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.1);
         }
         .pulse-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        #status-text { color: white; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        #status-text { color: white; font-size: 10px; font-weight: 700; text-transform: uppercase; }
 
-        .btn-visite-site {
-            background: white;
-            color: #333;
-            padding: 8px 20px;
-            border-radius: 99px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            line-height: 1.2;
-            transition: 0.3s;
-        }
-        .btn-visite-site span { font-weight: 400; font-size: 10px; color: #666; }
-        .btn-visite-site:hover { background: var(--slate-100); transform: translateY(-2px); }
-
-        /* --- HERO --- */
         .hero-section {
             position: relative;
             background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)), 
                         url('https://www.construtorapatriani.com.br/_next/image?url=https%3A%2F%2Fd1l3zvrqp603kj.cloudfront.net%2F03_P_SP_FACHADA_VOO_DE_PASSARO_min_9b0ddc5155.jpg&w=1920&q=85');
-            background-size: cover;
-            background-position: center;
-            min-height: 400px;
-            display: flex;
-            align-items: center;
-            color: white;
+            background-size: cover; background-position: center; min-height: 500px;
+            display: flex; align-items: center; color: white; padding-top: 60px;
         }
-        .hero-content h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
-        .hero-content h1 span { color: #fb022e; }
-        .hero-divider { height: 4px; width: 60px; background: #fb022e; margin-bottom: 1.5rem; }
+        .hero-content h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; }
+        .hero-content h1 span { color: var(--brand-color); }
+        .hero-divider { height: 4px; width: 80px; background: var(--brand-color); margin: 1.5rem 0; }
 
         /* --- FILTROS (NÃO FIXOS) --- */
-        .filters-wrapper {
-            position: relative;
-            z-index: 20;
-            margin-top: -50px;
-            margin-bottom: 40px;
-        }
+        .filters-wrapper { margin-top: -60px; margin-bottom: 40px; position: relative; z-index: 20; }
         .filters-container {
-            background: white;
-            padding: 25px;
-            border-radius: 1.5rem;
-            border: 1px solid var(--slate-200);
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 12px;
+            background: white; padding: 30px; border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+            display: grid; grid-template-columns: repeat(12, 1fr); gap: 15px;
         }
         .search-group { grid-column: span 12; position: relative; }
         .search-input {
-            width: 100%; padding: 14px 14px 14px 44px; border-radius: 0.75rem;
-            border: 1px solid var(--slate-200); background: var(--slate-50);
-            outline: none; font-size: 14px;
+            width: 100%; padding: 16px 16px 16px 48px; border-radius: 1rem;
+            border: 1px solid var(--slate-200); background: var(--slate-50); outline: none;
         }
-        .search-icon { position: absolute; left: 14px; top: 14px; color: var(--slate-400); width: 18px; }
-
         .filter-select {
-            grid-column: span 3; padding: 10px; border-radius: 0.5rem;
-            border: 1px solid var(--slate-200); background: var(--slate-50);
-            font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--slate-600);
+            grid-column: span 3; padding: 12px; border-radius: 0.75rem;
+            border: 1px solid var(--slate-200); font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--slate-600);
         }
         .btn-reset {
-            grid-column: span 3; background: var(--blue-patriani); color: white;
-            border: none; border-radius: 0.5rem; font-weight: 800; text-transform: uppercase;
-            font-size: 10px; cursor: pointer; transition: 0.2s;
+            grid-column: span 3; background: var(--brand-color); color: white; border: none;
+            border-radius: 0.75rem; font-weight: 900; text-transform: uppercase; font-size: 10px; cursor: pointer;
         }
 
-        /* --- GRID E CARDS --- */
-        .view-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 50px; }
+        /* --- GRID DE CARDS --- */
+        .view-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
         .card-summary {
-            background: white; border-radius: 1.5rem; border: 1px solid var(--slate-200);
-            overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; cursor: pointer;
+            background: white; border-radius: 2rem; border: 1px solid var(--slate-200);
+            overflow: hidden; transition: 0.3s; cursor: pointer; display: flex; flex-direction: column;
         }
-        .card-summary:hover { transform: translateY(-5px); border-color: var(--blue-patriani); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .card-header-img { height: 180px; background-size: cover; background-position: center; }
-        .card-body { padding: 20px; flex-grow: 1; }
-        .badge-construtora { font-size: 7px; font-weight: 900; color: #fb022e; background: #fff1f2; padding: 3px 8px; border-radius: 99px; text-transform: uppercase; }
-        .card-title { font-size: 17px; font-weight: 800; margin-top: 10px; color: var(--slate-800); }
+        .card-summary:hover { transform: translateY(-8px); border-color: var(--brand-color); }
+        .card-img { height: 190px; background-size: cover; background-position: center; }
+        .card-body { padding: 24px; flex-grow: 1; }
+        .badge-cons { font-size: 8px; font-weight: 900; color: var(--brand-color); background: #fff1f2; padding: 4px 8px; border-radius: 99px; text-transform: uppercase; }
+        .card-title { font-size: 18px; font-weight: 800; margin: 10px 0 4px; }
         .card-city { font-size: 10px; color: var(--slate-400); text-transform: uppercase; margin-bottom: 15px; }
 
-        /* --- TABELA --- */
-        .table-view { background: white; border-radius: 1.5rem; border: 1px solid var(--slate-200); overflow: hidden; }
-        .table-header { padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--slate-100); }
-        table { width: 100%; border-collapse: collapse; min-width: 600px; }
-        th { background: var(--slate-50); padding: 15px; text-align: left; font-size: 9px; color: var(--slate-400); text-transform: uppercase; }
-        td { padding: 15px; border-bottom: 1px solid var(--slate-50); font-size: 13px; }
+        /* --- MODO TABELA (RESTAURADO) --- */
+        .table-view { background: white; border-radius: 2rem; border: 1px solid var(--slate-200); overflow: hidden; }
+        .table-header { padding: 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--slate-100); }
+        .table-header h2 { font-weight: 800; text-transform: uppercase; font-size: 18px; }
+        table { width: 100%; border-collapse: collapse; min-width: 800px; }
+        th { background: var(--slate-50); padding: 18px; text-align: left; font-size: 10px; color: var(--slate-400); text-transform: uppercase; font-weight: 700; }
+        td { padding: 18px; border-bottom: 1px solid var(--slate-50); font-size: 14px; }
+        tr:hover td { background: var(--slate-50); cursor: pointer; }
+        .price-col { font-weight: 800; color: var(--brand-color); }
 
-        /* --- MODAL --- */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 15px; }
-        .modal-container { background: white; width: 100%; max-width: 900px; max-height: 90vh; border-radius: 2rem; overflow: hidden; position: relative; display: flex; }
+        /* --- MODAL / FICHA (RESTAURADO) --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .modal-container { background: white; width: 100%; max-width: 1000px; max-height: 90vh; border-radius: 2.5rem; overflow: hidden; position: relative; }
         .modal-body { display: grid; grid-template-columns: 1fr 1fr; width: 100%; overflow-y: auto; }
-        .modal-img-side { padding: 30px; background: #fcfcfc; }
-        .modal-info-side { padding: 40px; }
-        .btn-whatsapp { background: var(--green-whatsapp); color: white; text-decoration: none; display: block; text-align: center; padding: 18px; border-radius: 1rem; font-weight: 800; text-transform: uppercase; font-size: 12px; margin-top: 20px; }
-
-        /* --- MOBILE --- */
+        .modal-img-side { padding: 40px; background: var(--slate-50); display: flex; flex-direction: column; justify-content: center; }
+        .modal-info-side { padding: 50px; }
+        .btn-whatsapp { 
+            background: var(--green-whatsapp); color: white; text-decoration: none; display: flex; align-items: center; 
+            justify-content: center; padding: 20px; border-radius: 1.25rem; font-weight: 900; text-transform: uppercase; 
+            font-size: 12px; margin-top: 30px; transition: 0.3s;
+        }
+        
+        /* Mobile Adjusts */
         @media (max-width: 768px) {
-            .navbar .container { flex-wrap: wrap; justify-content: center; gap: 10px; }
-            .status-badge { order: 3; width: 100%; justify-content: center; margin: 0; }
+            .modal-body { grid-template-columns: 1fr; }
             .filters-container { grid-template-columns: 1fr; }
             .filter-select, .btn-reset { grid-column: span 1; }
-            .modal-body { grid-template-columns: 1fr; }
         }
         .hidden { display: none !important; }
     </style>
@@ -187,17 +124,10 @@
 
 <nav class="navbar">
     <div class="container">
-        <img src="https://sotereimoveis.com.br/wp-content/themes/itm/assets/img/logo/logo-sotere-dark.svg" alt="Sotere Logo" class="nav-logo">
-        
-        <div style="display: flex; align-items: center;">
-            <div class="status-badge">
-                <span class="pulse-dot"></span>
-                <span id="status-text">Conectando...</span>
-            </div>
-            <a href="https://www.sotereimoveis.com.br" target="_blank" class="btn-visite-site">
-                <span>Visite nosso Site</span>
-                SOTEREIMÓVEIS.COM.BR
-            </a>
+        <img src="https://sotereimoveis.com.br/wp-content/themes/itm/assets/img/logo/logo-sotere-dark.svg" class="nav-logo">
+        <div class="status-badge">
+            <span class="pulse-dot"></span>
+            <span id="status-text">Conectando...</span>
         </div>
     </div>
 </nav>
@@ -207,7 +137,7 @@
         <div class="hero-content">
             <h1>Portal de Revendas <br><span>Patriani</span></h1>
             <div class="hero-divider"></div>
-            <p>Oportunidades exclusivas com gestão estratégica <br>e curadoria da <strong>Sotere Imóveis</strong>.</p>
+            <p>Curadoria exclusiva da <strong>Sotere Imóveis</strong>.</p>
         </div>
     </div>
 </section>
@@ -216,23 +146,12 @@
     <div class="filters-wrapper">
         <section class="filters-container">
             <div class="search-group">
-                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Busque por empreendimento, cidade ou construtora..." class="search-input">
+                <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." class="search-input">
             </div>
-            
-            <select id="filtra-empreendimento" onchange="aplicarFiltros()" class="filter-select">
-                <option value="">Empreendimento</option>
-            </select>
-
-            <select id="filtro-construtora" onchange="aplicarFiltros()" class="filter-select">
-                <option value="">Construtora</option>
-            </select>
-
-            <select id="filtro-cidade" onchange="aplicarFiltros()" class="filter-select">
-                <option value="">Cidade</option>
-            </select>
-
-            <button onclick="resetarVista()" class="btn-reset">Limpar Tudo</button>
+            <select id="filtra-empreendimento" onchange="aplicarFiltros()" class="filter-select"><option value="">Empreendimento</option></select>
+            <select id="filtro-construtora" onchange="aplicarFiltros()" class="filter-select"><option value="">Construtora</option></select>
+            <select id="filtro-cidade" onchange="aplicarFiltros()" class="filter-select"><option value="">Cidade</option></select>
+            <button onclick="resetarVista()" class="btn-reset">Limpar Filtros</button>
         </section>
     </div>
 
@@ -242,7 +161,7 @@
 <div id="modal-detalhes" class="modal-overlay hidden">
     <div class="modal-container">
         <div id="conteudo-modal" class="modal-body"></div>
-        <button onclick="fecharModal()" style="position:absolute; top:15px; right:15px; border:none; background:none; cursor:pointer; font-size:24px;">&times;</button>
+        <button onclick="fecharModal()" style="position:absolute; top:20px; right:20px; border:none; background:#f1f5f9; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:20px; font-weight:bold;">&times;</button>
     </div>
 </div>
 
@@ -251,7 +170,6 @@
     let todosImoveis = [];
 
     function carregarDados() {
-        document.getElementById('status-text').innerText = "Carregando...";
         Papa.parse(LINK_CSV, {
             download: true, header: true, skipEmptyLines: true,
             complete: function(r) {
@@ -267,7 +185,7 @@
         const fEmp = document.getElementById('filtra-empreendimento');
         const fCons = document.getElementById('filtro-construtora');
         const fCid = document.getElementById('filtro-cidade');
-
+        
         const nomes = [...new Set(todosImoveis.map(i => i.Empreendimento))].sort();
         const construtoras = [...new Set(todosImoveis.map(i => i.Construtora))].sort();
         const cidades = [...new Set(todosImoveis.map(i => i.Cidade))].sort();
@@ -275,12 +193,6 @@
         nomes.forEach(n => fEmp.innerHTML += `<option value="${n}">${n}</option>`);
         construtoras.forEach(c => fCons.innerHTML += `<option value="${c}">${c}</option>`);
         cidades.forEach(cid => fCid.innerHTML += `<option value="${cid}">${cid}</option>`);
-    }
-
-    function formatarNumero(str) {
-        if (!str || str.trim() === "" || str.includes("---")) return null;
-        const num = parseFloat(str.replace(/[^\d]/g, '')) / 100;
-        return isNaN(num) ? null : num;
     }
 
     function renderizarSumario(items) {
@@ -294,38 +206,27 @@
                     construtora: curr.Construtora,
                     cidade: curr.Cidade,
                     foto: curr['Foto Empreendimento'],
-                    precos: [],
-                    plantas: new Set(),
                     total: 0
                 };
             }
-            const valor = formatarNumero(curr['Valor Total']);
-            if (valor !== null) acc[curr.Empreendimento].precos.push(valor);
-            if (curr.Metragem) acc[curr.Empreendimento].plantas.add(curr.Metragem + 'm²');
             acc[curr.Empreendimento].total++;
             return acc;
         }, {});
 
-        container.innerHTML = Object.values(agrupado).map(p => {
-            const temPreco = p.precos.length > 0;
-            const min = temPreco ? Math.min(...p.precos).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : "Sob Consulta";
-            const max = temPreco ? Math.max(...p.precos).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : "";
-            const faixa = (max && max !== min) ? `${min} a ${max}` : min;
-
-            return `
+        container.innerHTML = Object.values(agrupado).map(p => `
             <div class="card-summary" onclick="verUnidades('${p.nome}')">
-                <div class="card-header-img" style="background-image: url('${p.foto}')"></div>
+                <div class="card-img" style="background-image: url('${p.foto}')"></div>
                 <div class="card-body">
-                    <span class="badge-construtora">${p.construtora}</span>
+                    <div style="display:flex; justify-content:space-between">
+                        <span class="badge-cons">${p.construtora}</span>
+                        <span style="font-size:10px; font-weight:700; color:#94a3b8">${p.total} Unid.</span>
+                    </div>
                     <h3 class="card-title">${p.nome}</h3>
                     <p class="card-city">${p.cidade}</p>
-                    <div style="border-top:1px solid #f1f5f9; padding-top:12px;">
-                        <p style="font-size:8px; font-weight:700; color:#cbd5e1; text-transform:uppercase;">Valor aproximado</p>
-                        <p style="font-size:14px; font-weight:800; color:#1e293b;">${faixa}</p>
-                    </div>
+                    <p style="font-size:10px; font-weight:800; color:var(--brand-color); text-transform:uppercase; margin-top:10px;">Ver Unidades →</p>
                 </div>
-            </div>`;
-        }).join('');
+            </div>
+        `).join('');
     }
 
     function verUnidades(nome) {
@@ -334,8 +235,8 @@
         container.className = "table-view";
         container.innerHTML = `
             <div class="table-header">
-                <h2 style="font-weight:800; color:#0f172a;">${nome}</h2>
-                <button onclick="resetarVista()" style="color:#fb022e; font-weight:800; border:none; background:none; cursor:pointer; font-size:11px; text-transform:uppercase;">← Voltar</button>
+                <h2>${nome}</h2>
+                <button onclick="resetarVista()" style="border:none; background:none; color:var(--brand-color); font-weight:900; font-size:10px; cursor:pointer;">← VOLTAR</button>
             </div>
             <div style="overflow-x:auto;">
                 <table>
@@ -344,8 +245,9 @@
                             <th>Unidade</th>
                             <th>Andar</th>
                             <th>Planta</th>
-                            <th>Valor</th>
-                            <th style="text-align:center">Ação</th>
+                            <th>Previsão Entrega</th>
+                            <th>Valor Total</th>
+                            <th style="text-align:center">Ficha</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -354,14 +256,15 @@
                                 <td style="font-weight:700">${i.Unidade}</td>
                                 <td>${i.Andar}º</td>
                                 <td>${i.Metragem}m²</td>
-                                <td style="font-weight:800; color:#fb022e">${i['Valor Total']}</td>
-                                <td style="text-align:center"><span style="background:#f1f5f9; padding:5px 12px; border-radius:6px; font-size:10px; font-weight:800;">VER</span></td>
+                                <td>${i['Previsão Entrega'] || i.Status}</td>
+                                <td class="price-col">${i['Valor Total']}</td>
+                                <td style="text-align:center"><span style="background:#f1f5f9; padding:5px 12px; border-radius:8px; font-size:10px; font-weight:900; color:#94a3b8;">VER</span></td>
                             </tr>
                         `).join('')}
                     </tbody>
                 </table>
             </div>`;
-        window.scrollTo({ top: 350, behavior: 'smooth' });
+        window.scrollTo({ top: 400, behavior: 'smooth' });
     }
 
     function abrirFicha(item) {
@@ -371,23 +274,37 @@
 
         conteudo.innerHTML = `
             <div class="modal-img-side">
-                <img src="${item['Foto Unidade']}" style="width:100%; border-radius:1.5rem; height:300px; object-fit:cover; margin-bottom:20px;" onerror="this.src='https://via.placeholder.com/400x300'">
-                <h2 style="font-weight:900; color:#0f172a;">${item.Empreendimento}</h2>
-                <p style="color:#64748b; font-size:14px;">${item.Cidade}</p>
+                <img src="${item['Foto Unidade']}" style="width:100%; border-radius:2rem; height:350px; object-fit:cover; margin-bottom:25px;" onerror="this.src='https://via.placeholder.com/400x300'">
+                <h2 style="font-weight:900; font-size:28px;">${item.Empreendimento}</h2>
+                <p style="color:var(--slate-400); font-weight:500;">${item['Endereço'] || 'Consulte Localização'}</p>
             </div>
             <div class="modal-info-side">
-                <p style="text-transform:uppercase; font-size:10px; font-weight:800; color:#fb022e; letter-spacing:1px;">Revenda Exclusiva</p>
-                <h3 style="font-size:36px; font-weight:900; margin:10px 0;">${item['Valor Total']}</h3>
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:20px 0;">
-                    <div style="background:#f8fafc; padding:15px; border-radius:1rem;">
-                        <small style="color:#cbd5e1; font-weight:700; text-transform:uppercase; font-size:8px;">Unidade</small>
-                        <p style="font-weight:800;">${item.Unidade}</p>
+                <span style="color:var(--brand-color); font-weight:900; font-size:10px; text-transform:uppercase; letter-spacing:1px;">Revenda Exclusiva</span>
+                <h3 style="font-size:42px; font-weight:900; margin:10px 0;">${item['Valor Total']}</h3>
+                <p style="color:var(--slate-400); font-weight:700; font-size:12px; text-transform:uppercase; margin-bottom:30px;">m²: ${item['m²'] || '---'}</p>
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:25px;">
+                    <div style="background:var(--slate-50); padding:15px; border-radius:1rem;">
+                        <p style="font-size:8px; color:var(--slate-400); font-weight:800; text-transform:uppercase;">Unidade/Andar</p>
+                        <p style="font-weight:900; font-size:18px;">${item.Unidade} (${item.Andar}º)</p>
                     </div>
-                    <div style="background:#f8fafc; padding:15px; border-radius:1rem;">
-                        <small style="color:#cbd5e1; font-weight:700; text-transform:uppercase; font-size:8px;">Metragem</small>
-                        <p style="font-weight:800;">${item.Metragem}m²</p>
+                    <div style="background:var(--slate-50); padding:15px; border-radius:1rem;">
+                        <p style="font-size:8px; color:var(--slate-400); font-weight:800; text-transform:uppercase;">Metragem</p>
+                        <p style="font-weight:900; font-size:18px;">${item.Metragem}m²</p>
                     </div>
                 </div>
+
+                <div style="border-top: 1px solid var(--slate-100); padding-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                    <div>
+                        <p style="font-size:8px; color:var(--slate-400); font-weight:800; text-transform:uppercase;">Ato Previsto</p>
+                        <p style="font-weight:900; font-size:20px; color:#059669;">${item.Ato || 'Consultar'}</p>
+                    </div>
+                    <div>
+                        <p style="font-size:8px; color:var(--slate-400); font-weight:800; text-transform:uppercase;">Fluxo Restante</p>
+                        <p style="font-weight:900; font-size:20px; color:var(--brand-color);">${item.Entrega || 'Consultar'}</p>
+                    </div>
+                </div>
+
                 <a href="https://wa.me/5511991183368?text=${whatsMsg}" target="_blank" class="btn-whatsapp">Falar com Corretor</a>
             </div>`;
         modal.classList.remove('hidden');
