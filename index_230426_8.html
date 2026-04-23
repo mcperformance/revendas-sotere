@@ -9,340 +9,253 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- DESIGN SYSTEM --- */
         :root {
             --blue-sotere: #004680;
-            --brand-color: #fb022e; /* Patriani Red */
+            --brand-red: #fb022e;
             --slate-50: #f8fafc;
-            --slate-100: #f1f5f9;
             --slate-200: #e2e8f0;
             --slate-400: #94a3b8;
-            --slate-600: #475569;
             --slate-800: #1e293b;
-            --green-whatsapp: #25D366;
+            --whatsapp: #25D366;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--slate-50); color: var(--slate-800); line-height: 1.5; }
-        .container { width: 100%; max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--slate-50); color: var(--slate-800); }
 
-        /* --- NAVBAR & HERO --- */
-        .navbar { 
-            position: absolute; top: 0; width: 100%; z-index: 50;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
-            padding: 20px 0;
+        /* HEADER FIXO AZUL */
+        .header-fixed {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: var(--blue-sotere); padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
-        .nav-logo { height: 40px; filter: brightness(0) invert(1); }
-        
-        .status-badge {
-            display: flex; align-items: center; gap: 8px;
-            background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(10px);
-            padding: 8px 16px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.1);
-        }
-        .pulse-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-        #status-text { color: white; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        .header-fixed .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo-img { height: 35px; filter: brightness(0) invert(1); }
 
-        .hero-section {
-            position: relative;
-            background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)), 
-                        url('https://www.construtorapatriani.com.br/_next/image?url=https%3A%2F%2Fd1l3zvrqp603kj.cloudfront.net%2F03_P_SP_FACHADA_VOO_DE_PASSARO_min_9b0ddc5155.jpg&w=1920&q=85');
-            background-size: cover; background-position: center; min-height: 500px;
-            display: flex; align-items: center; color: white; padding-top: 60px;
+        /* HERO & FILTROS */
+        .hero { 
+            padding-top: 140px; padding-bottom: 80px; 
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://www.construtorapatriani.com.br/_next/image?url=https%3A%2F%2Fd1l3zvrqp603kj.cloudfront.net%2F03_P_SP_FACHADA_VOO_DE_PASSARO_min_9b0ddc5155.jpg&w=1920&q=85');
+            background-size: cover; background-position: center; color: white; text-align: center;
         }
-        .hero-content h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; }
-        .hero-content h1 span { color: var(--brand-color); }
-        .hero-divider { height: 4px; width: 80px; background: var(--brand-color); margin: 1.5rem 0; }
-
-        /* --- FILTROS (NÃO FIXOS) --- */
-        .filters-wrapper { margin-top: -60px; margin-bottom: 40px; position: relative; z-index: 20; }
-        .filters-container {
-            background: white; padding: 30px; border-radius: 2rem;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15);
+        .filters-area { margin-top: -50px; position: relative; z-index: 20; }
+        .filter-box { 
+            background: white; padding: 25px; border-radius: 2rem; 
             display: grid; grid-template-columns: repeat(12, 1fr); gap: 15px;
-        }
-        .search-group { grid-column: span 12; position: relative; }
-        .search-input {
-            width: 100%; padding: 16px 16px 16px 48px; border-radius: 1rem;
-            border: 1px solid var(--slate-200); background: var(--slate-50); outline: none;
-        }
-        .filter-select {
-            grid-column: span 3; padding: 12px; border-radius: 0.75rem;
-            border: 1px solid var(--slate-200); font-weight: 700; font-size: 11px; text-transform: uppercase; color: var(--slate-600);
-        }
-        .btn-reset {
-            grid-column: span 3; background: var(--brand-color); color: white; border: none;
-            border-radius: 0.75rem; font-weight: 900; text-transform: uppercase; font-size: 10px; cursor: pointer;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
-        /* --- GRID DE CARDS --- */
-        .view-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .card-summary {
-            background: white; border-radius: 2rem; border: 1px solid var(--slate-200);
-            overflow: hidden; transition: 0.3s; cursor: pointer; display: flex; flex-direction: column;
+        /* CARD DE EMPREENDIMENTO */
+        .card { 
+            background: white; border-radius: 1.5rem; border: 1px solid var(--slate-200); 
+            overflow: hidden; transition: 0.3s; cursor: pointer; height: 100%; display: flex; flex-direction: column;
         }
-        .card-summary:hover { transform: translateY(-8px); border-color: var(--brand-color); }
-        .card-img { height: 190px; background-size: cover; background-position: center; }
-        .card-body { padding: 24px; flex-grow: 1; }
-        .badge-cons { font-size: 8px; font-weight: 900; color: var(--brand-color); background: #fff1f2; padding: 4px 8px; border-radius: 99px; text-transform: uppercase; }
-        .card-title { font-size: 18px; font-weight: 800; margin: 10px 0 4px; }
-        .card-city { font-size: 10px; color: var(--slate-400); text-transform: uppercase; margin-bottom: 15px; }
+        .card:hover { transform: translateY(-5px); border-color: var(--brand-red); }
+        .card-img { height: 200px; background-size: cover; background-position: center; }
+        .card-body { padding: 20px; flex-grow: 1; }
+        .badge-red { font-size: 9px; font-weight: 800; color: var(--brand-red); background: #fff1f2; padding: 4px 10px; border-radius: 99px; text-transform: uppercase; }
+        .card-title { font-size: 18px; font-weight: 800; margin: 12px 0 4px; }
+        .card-info { border-top: 1px solid var(--slate-50); margin-top: 15px; padding-top: 15px; }
+        .info-label { font-size: 8px; font-weight: 700; color: var(--slate-400); text-transform: uppercase; }
+        .info-val { font-size: 13px; font-weight: 700; color: var(--slate-800); }
 
-        /* --- MODO TABELA (RESTAURADO) --- */
-        .table-view { background: white; border-radius: 2rem; border: 1px solid var(--slate-200); overflow: hidden; }
-        .table-header { padding: 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--slate-100); }
-        .table-header h2 { font-weight: 800; text-transform: uppercase; font-size: 18px; }
-        table { width: 100%; border-collapse: collapse; min-width: 800px; }
-        th { background: var(--slate-50); padding: 18px; text-align: left; font-size: 10px; color: var(--slate-400); text-transform: uppercase; font-weight: 700; }
-        td { padding: 18px; border-bottom: 1px solid var(--slate-50); font-size: 14px; }
+        /* TABELA DE UNIDADES */
+        .table-container { background: white; border-radius: 1.5rem; overflow: hidden; border: 1px solid var(--slate-200); }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background: #fcfcfc; padding: 15px; text-align: left; font-size: 10px; color: var(--slate-400); text-transform: uppercase; border-bottom: 1px solid var(--slate-50); }
+        td { padding: 15px; border-bottom: 1px solid var(--slate-50); font-size: 14px; }
         tr:hover td { background: var(--slate-50); cursor: pointer; }
-        .price-col { font-weight: 800; color: var(--brand-color); }
 
-        /* --- MODAL / FICHA (RESTAURADO) --- */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; }
-        .modal-container { background: white; width: 100%; max-width: 1000px; max-height: 90vh; border-radius: 2.5rem; overflow: hidden; position: relative; }
-        .modal-body { display: grid; grid-template-columns: 1fr 1fr; width: 100%; overflow-y: auto; }
-        .modal-img-side { padding: 40px; background: var(--slate-50); display: flex; flex-direction: column; justify-content: center; }
-        .modal-info-side { padding: 50px; }
-        .btn-whatsapp { 
-            background: var(--green-whatsapp); color: white; text-decoration: none; display: flex; align-items: center; 
-            justify-content: center; padding: 20px; border-radius: 1.25rem; font-weight: 900; text-transform: uppercase; 
-            font-size: 12px; margin-top: 30px; transition: 0.3s;
-        }
+        /* MODAL RESPONSIVO */
+        .modal { position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; padding: 15px; }
+        .modal-content { background: white; width: 100%; max-width: 900px; max-height: 90vh; border-radius: 2rem; overflow-y: auto; position: relative; }
+        .modal-grid { display: grid; grid-template-columns: 1fr 1fr; }
         
-        /* Mobile Adjusts */
         @media (max-width: 768px) {
-            .modal-body { grid-template-columns: 1fr; }
-            .filters-container { grid-template-columns: 1fr; }
-            .filter-select, .btn-reset { grid-column: span 1; }
+            .modal-grid { grid-template-columns: 1fr; }
+            .filter-box { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2rem; }
         }
+
+        .btn-wa { 
+            background: var(--whatsapp); color: white; text-decoration: none; padding: 15px; 
+            border-radius: 1rem; display: block; text-align: center; font-weight: 800; 
+            text-transform: uppercase; font-size: 12px; margin-top: 20px;
+        }
+
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<nav class="navbar">
+<header class="header-fixed">
     <div class="container">
-        <img src="https://sotereimoveis.com.br/wp-content/themes/itm/assets/img/logo/logo-sotere-dark.svg" class="nav-logo">
-        <div class="status-badge">
-            <span class="pulse-dot"></span>
-            <span id="status-text">Conectando...</span>
-        </div>
+        <img src="https://sotereimoveis.com.br/wp-content/themes/itm/assets/img/logo/logo-sotere-dark.svg" class="logo-img">
+        <div style="color: white; font-size: 10px; font-weight: 700;" id="count-estoque">ATUALIZANDO...</div>
     </div>
-</nav>
+</header>
 
-<section class="hero-section">
+<section class="hero">
     <div class="container">
-        <div class="hero-content">
-            <h1>Portal de Revendas <br><span>Patriani</span></h1>
-            <div class="hero-divider"></div>
-            <p>Curadoria exclusiva da <strong>Sotere Imóveis</strong>.</p>
-        </div>
+        <h1 style="font-size: 3rem; font-weight: 900;">Portal de Revendas <span style="color: var(--brand-red);">Patriani</span></h1>
+        <p style="font-size: 1.2rem; font-weight: 300;">Curadoria estratégica Sotere Imóveis</p>
     </div>
 </section>
 
-<main class="container">
-    <div class="filters-wrapper">
-        <section class="filters-container">
-            <div class="search-group">
-                <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." class="search-input">
-            </div>
-            <select id="filtra-empreendimento" onchange="aplicarFiltros()" class="filter-select"><option value="">Empreendimento</option></select>
-            <select id="filtro-construtora" onchange="aplicarFiltros()" class="filter-select"><option value="">Construtora</option></select>
-            <select id="filtro-cidade" onchange="aplicarFiltros()" class="filter-select"><option value="">Cidade</option></select>
-            <button onclick="resetarVista()" class="btn-reset">Limpar Filtros</button>
-        </section>
+<div class="container filters-area">
+    <div class="filter-box">
+        <input type="text" id="busca" oninput="filtrar()" placeholder="Buscar empreendimento..." style="grid-column: span 12; padding: 15px; border-radius: 1rem; border: 1px solid var(--slate-200); outline: none;">
+        <select id="f-cid" onchange="filtrar()" style="grid-column: span 4; padding: 12px; border-radius: 0.8rem; border: 1px solid var(--slate-200); font-weight: bold;"></select>
+        <button onclick="reset()" style="grid-column: span 8; background: var(--blue-sotere); color: white; border: none; border-radius: 0.8rem; font-weight: 900; text-transform: uppercase; cursor: pointer;">Limpar Filtros</button>
     </div>
+</div>
 
-    <div id="view-container" class="view-grid"></div>
+<main class="container" style="margin-top: 40px; margin-bottom: 80px;">
+    <div id="grid-main" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;"></div>
 </main>
 
-<div id="modal-detalhes" class="modal-overlay hidden">
-    <div class="modal-container">
-        <div id="conteudo-modal" class="modal-body"></div>
-        <button onclick="fecharModal()" style="position:absolute; top:20px; right:20px; border:none; background:#f1f5f9; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:20px; font-weight:bold;">&times;</button>
+<div id="modal" class="modal hidden">
+    <div class="modal-content">
+        <button onclick="closeModal()" style="position: absolute; top: 15px; right: 15px; width: 35px; height: 35px; border-radius: 50%; border: none; background: #eee; cursor: pointer; font-weight: bold;">X</button>
+        <div id="modal-body" class="modal-grid"></div>
     </div>
 </div>
 
 <script>
-    const LINK_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROTgHcXnaIQlwelJZknF-e_RAKvjPKgWeZVN2GSoajz1ORsCMfNWv1FwZGadV9c4gSfGHw29w3zRRL/pub?gid=0&single=true&output=csv';
-    let todosImoveis = [];
+    const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROTgHcXnaIQlwelJZknF-e_RAKvjPKgWeZVN2GSoajz1ORsCMfNWv1FwZGadV9c4gSfGHw29w3zRRL/pub?gid=0&single=true&output=csv';
+    let data = [];
 
-    function carregarDados() {
-        Papa.parse(LINK_CSV, {
-            download: true, header: true, skipEmptyLines: true,
-            complete: function(r) {
-                todosImoveis = r.data.filter(i => i.Empreendimento);
-                document.getElementById('status-text').innerText = "Estoque Atualizado";
-                popularFiltros();
-                renderizarSumario(todosImoveis);
+    function load() {
+        Papa.parse(CSV_URL, {
+            download: true, header: true,
+            complete: r => {
+                data = r.data.filter(x => x.Empreendimento);
+                document.getElementById('count-estoque').innerText = data.length + ' UNIDADES DISPONÍVEIS';
+                initFiltros();
+                renderCards(data);
             }
         });
     }
 
-    function popularFiltros() {
-        const fEmp = document.getElementById('filtra-empreendimento');
-        const fCons = document.getElementById('filtro-construtora');
-        const fCid = document.getElementById('filtro-cidade');
-        
-        const nomes = [...new Set(todosImoveis.map(i => i.Empreendimento))].sort();
-        const construtoras = [...new Set(todosImoveis.map(i => i.Construtora))].sort();
-        const cidades = [...new Set(todosImoveis.map(i => i.Cidade))].sort();
-
-        nomes.forEach(n => fEmp.innerHTML += `<option value="${n}">${n}</option>`);
-        construtoras.forEach(c => fCons.innerHTML += `<option value="${c}">${c}</option>`);
-        cidades.forEach(cid => fCid.innerHTML += `<option value="${cid}">${cid}</option>`);
+    function initFiltros() {
+        const cids = [...new Set(data.map(x => x.Cidade))].sort();
+        const sel = document.getElementById('f-cid');
+        sel.innerHTML = '<option value="">Todas as Cidades</option>';
+        cids.forEach(c => sel.innerHTML += `<option value="${c}">${c}</option>`);
     }
 
-    function renderizarSumario(items) {
-        const container = document.getElementById('view-container');
-        container.className = "view-grid";
+    function renderCards(items) {
+        const grid = document.getElementById('grid-main');
+        grid.className = "grid-cards";
+        grid.style.display = 'grid';
         
-        const agrupado = items.reduce((acc, curr) => {
-            if (!acc[curr.Empreendimento]) {
-                acc[curr.Empreendimento] = {
-                    nome: curr.Empreendimento,
-                    construtora: curr.Construtora,
-                    cidade: curr.Cidade,
-                    foto: curr['Foto Empreendimento'],
-                    total: 0
-                };
+        const grouped = items.reduce((acc, i) => {
+            if (!acc[i.Empreendimento]) {
+                acc[i.Empreendimento] = { name: i.Empreendimento, city: i.Cidade, cons: i.Construtora, pic: i['Foto Empreendimento'], prices: [], sizes: new Set(), count: 0 };
             }
-            acc[curr.Empreendimento].total++;
+            const val = parseFloat(i['Valor Total'].replace(/[^\d]/g, ''))/100;
+            if (val) acc[i.Empreendimento].prices.push(val);
+            if (i.Metragem) acc[i.Empreendimento].sizes.add(i.Metragem + 'm²');
+            acc[i.Empreendimento].count++;
             return acc;
         }, {});
 
-        container.innerHTML = Object.values(agrupado).map(p => `
-            <div class="card-summary" onclick="verUnidades('${p.nome}')">
-                <div class="card-img" style="background-image: url('${p.foto}')"></div>
+        grid.innerHTML = Object.values(grouped).map(g => {
+            const pMin = Math.min(...g.prices).toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0});
+            const pMax = Math.max(...g.prices).toLocaleString('pt-BR', {style:'currency', currency:'BRL', maximumFractionDigits:0});
+            return `
+            <div class="card" onclick="viewUnits('${g.name}')">
+                <div class="card-img" style="background-image: url('${g.pic}')"></div>
                 <div class="card-body">
                     <div style="display:flex; justify-content:space-between">
-                        <span class="badge-cons">${p.construtora}</span>
-                        <span style="font-size:10px; font-weight:700; color:#94a3b8">${p.total} Unid.</span>
+                        <span class="badge-red">${g.cons}</span>
+                        <span style="font-size:10px; font-weight:bold; color:var(--slate-400)">${g.count} Unid.</span>
                     </div>
-                    <h3 class="card-title">${p.nome}</h3>
-                    <p class="card-city">${p.cidade}</p>
-                    <p style="font-size:10px; font-weight:800; color:var(--brand-color); text-transform:uppercase; margin-top:10px;">Ver Unidades →</p>
+                    <h3 class="card-title">${g.name}</h3>
+                    <p style="font-size:10px; color:var(--slate-400); text-transform:uppercase;">${g.city}</p>
+                    <div class="card-info">
+                        <p class="info-label">Plantas</p>
+                        <p class="info-val">${[...g.sizes].sort().join(' | ')}</p>
+                        <div style="margin-top:10px">
+                            <p class="info-label">Valores</p>
+                            <p class="info-val" style="color:var(--brand-red)">${pMin} a ${pMax}</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        `).join('');
-    }
-
-    function verUnidades(nome) {
-        const filtrados = todosImoveis.filter(i => i.Empreendimento === nome);
-        const container = document.getElementById('view-container');
-        container.className = "table-view";
-        container.innerHTML = `
-            <div class="table-header">
-                <h2>${nome}</h2>
-                <button onclick="resetarVista()" style="border:none; background:none; color:var(--brand-color); font-weight:900; font-size:10px; cursor:pointer;">← VOLTAR</button>
-            </div>
-            <div style="overflow-x:auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Unidade</th>
-                            <th>Andar</th>
-                            <th>Planta</th>
-                            <th>Previsão Entrega</th>
-                            <th>Valor Total</th>
-                            <th style="text-align:center">Ficha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${filtrados.map(i => `
-                            <tr onclick='abrirFicha(${JSON.stringify(i).replace(/'/g, "&apos;")})'>
-                                <td style="font-weight:700">${i.Unidade}</td>
-                                <td>${i.Andar}º</td>
-                                <td>${i.Metragem}m²</td>
-                                <td>${i['Previsão Entrega'] || i.Status}</td>
-                                <td class="price-col">${i['Valor Total']}</td>
-                                <td style="text-align:center"><span style="background:#f1f5f9; padding:5px 12px; border-radius:8px; font-size:10px; font-weight:900; color:#94a3b8;">VER</span></td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
             </div>`;
-        window.scrollTo({ top: 400, behavior: 'smooth' });
+        }).join('');
     }
 
-    function abrirFicha(item) {
-        const modal = document.getElementById('modal-detalhes');
-        const conteudo = document.getElementById('conteudo-modal');
-        const whatsMsg = encodeURIComponent(`Olá! Tenho interesse na unidade ${item.Unidade} do ${item.Empreendimento}.`);
+    function viewUnits(name) {
+        const units = data.filter(x => x.Empreendimento === name);
+        const grid = document.getElementById('grid-main');
+        grid.style.display = 'block';
+        grid.innerHTML = `
+            <div class="table-container">
+                <div style="padding:20px; display:flex; justify-content:space-between; align-items:center; background:#fcfcfc;">
+                    <h2 style="font-weight:900; text-transform:uppercase;">${name}</h2>
+                    <button onclick="reset()" style="border:none; background:none; color:var(--brand-red); font-weight:bold; cursor:pointer;">← VOLTAR</button>
+                </div>
+                <div style="overflow-x:auto">
+                    <table>
+                        <thead><tr><th>Unidade</th><th>Andar</th><th>Planta</th><th>Previsão</th><th>Valor Total</th><th>Ação</th></tr></thead>
+                        <tbody>
+                            ${units.map(u => `
+                                <tr onclick='openUnit(${JSON.stringify(u).replace(/'/g, "&apos;")})'>
+                                    <td style="font-weight:bold">${u.Unidade}</td>
+                                    <td>${u.Andar}º</td>
+                                    <td>${u.Metragem}m²</td>
+                                    <td>${u['Previsão Entrega'] || u.Status}</td>
+                                    <td style="color:var(--brand-red); font-weight:800">${u['Valor Total']}</td>
+                                    <td><span style="font-size:9px; font-weight:bold; color:#aaa; border:1px solid #eee; padding:4px 8px; border-radius:5px;">VER</span></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>`;
+        window.scrollTo({top: 400, behavior:'smooth'});
+    }
 
-        conteudo.innerHTML = `
-            <div class="modal-img-side">
-                <img src="${item['Foto Unidade']}" style="width:100%; border-radius:2rem; height:350px; object-fit:cover; margin-bottom:25px;" onerror="this.src='https://via.placeholder.com/400x300'">
-                <h2 style="font-weight:900; font-size:28px;">${item.Empreendimento}</h2>
-                <p style="color:var(--slate-400); font-weight:500;">${item['Endereço'] || 'Consulte Localização'}</p>
+    function openUnit(u) {
+        const msg = encodeURIComponent(`Olá! Quero informações da unidade ${u.Unidade} do ${u.Empreendimento}.`);
+        document.getElementById('modal-body').innerHTML = `
+            <div style="padding:20px; background:#f8fafc;">
+                <img src="${u['Foto Unidade']}" style="width:100%; height:300px; object-fit:cover; border-radius:1.5rem; box-shadow:0 10px 20px rgba(0,0,0,0.1);" onerror="this.src='https://via.placeholder.com/400x300'">
+                <h2 style="margin-top:20px; font-weight:900;">${u.Empreendimento}</h2>
+                <p style="font-size:12px; color:#888;">${u.Endereço || ''}</p>
             </div>
-            <div class="modal-info-side">
-                <span style="color:var(--brand-color); font-weight:900; font-size:10px; text-transform:uppercase; letter-spacing:1px;">Revenda Exclusiva</span>
-                <h3 style="font-size:42px; font-weight:900; margin:10px 0;">${item['Valor Total']}</h3>
-                <p style="color:var(--slate-400); font-weight:700; font-size:12px; text-transform:uppercase; margin-bottom:30px;">m²: ${item['m²'] || '---'}</p>
+            <div style="padding:30px;">
+                <span class="badge-red">Oportunidade</span>
+                <h3 style="font-size:32px; font-weight:900; margin:10px 0;">${u['Valor Total']}</h3>
+                <p style="font-size:11px; color:#aaa; font-weight:bold; text-transform:uppercase; margin-bottom:20px;">m²: ${u['m²'] || '---'}</p>
                 
-                <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-bottom:25px;">
-                    <div style="background:var(--slate-50); padding:15px; border-radius:1rem;">
-                        <p style="font-size:8px; color:var(--slate-400); font-weight:800; text-transform:uppercase;">Unidade/Andar</p>
-                        <p style="font-weight:900; font-size:18px;">${item.Unidade} (${item.Andar}º)</p>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div style="background:#f8fafc; padding:15px; border-radius:1rem;">
+                        <p class="info-label">Ato Previsto</p>
+                        <p style="font-size:18px; font-weight:900; color:#059669;">${u.Ato || 'Consultar'}</p>
                     </div>
-                    <div style="background:var(--slate-50); padding:15px; border-radius:1rem;">
-                        <p style="font-size:8px; color:var(--slate-400); font-weight:800; text-transform:uppercase;">Metragem</p>
-                        <p style="font-weight:900; font-size:18px;">${item.Metragem}m²</p>
-                    </div>
-                </div>
-
-                <div style="border-top: 1px solid var(--slate-100); padding-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-                    <div>
-                        <p style="font-size:8px; color:var(--slate-400); font-weight:800; text-transform:uppercase;">Ato Previsto</p>
-                        <p style="font-weight:900; font-size:20px; color:#059669;">${item.Ato || 'Consultar'}</p>
-                    </div>
-                    <div>
-                        <p style="font-size:8px; color:var(--slate-400); font-weight:800; text-transform:uppercase;">Fluxo Restante</p>
-                        <p style="font-weight:900; font-size:20px; color:var(--brand-color);">${item.Entrega || 'Consultar'}</p>
+                    <div style="background:#f8fafc; padding:15px; border-radius:1rem;">
+                        <p class="info-label">Fluxo Restante</p>
+                        <p style="font-size:18px; font-weight:900; color:var(--brand-red);">${u.Entrega || 'Consultar'}</p>
                     </div>
                 </div>
-
-                <a href="https://wa.me/5511991183368?text=${whatsMsg}" target="_blank" class="btn-whatsapp">Falar com Corretor</a>
+                <a href="https://wa.me/5511991183368?text=${msg}" target="_blank" class="btn-wa">Chamar no WhatsApp</a>
             </div>`;
-        modal.classList.remove('hidden');
+        document.getElementById('modal').classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
 
-    function fecharModal() {
-        document.getElementById('modal-detalhes').classList.add('hidden');
-        document.body.style.overflow = 'auto';
+    function closeModal() { document.getElementById('modal').classList.add('hidden'); document.body.style.overflow = 'auto'; }
+    function filtrar() {
+        const b = document.getElementById('busca').value.toLowerCase();
+        const c = document.getElementById('f-cid').value;
+        const filtered = data.filter(x => (x.Empreendimento.toLowerCase().includes(b) || x.Cidade.toLowerCase().includes(b)) && (!c || x.Cidade === c));
+        renderCards(filtered);
     }
+    function reset() { document.getElementById('busca').value=''; document.getElementById('f-cid').value=''; renderCards(data); }
 
-    function aplicarFiltros() {
-        const busca = document.getElementById('busca-global').value.toLowerCase();
-        const selEmp = document.getElementById('filtra-empreendimento').value;
-        const selCons = document.getElementById('filtro-construtora').value;
-        const selCid = document.getElementById('filtro-cidade').value;
-
-        const filtrados = todosImoveis.filter(i => {
-            const matchesBusca = !busca || (i.Empreendimento + i.Cidade + i.Construtora).toLowerCase().includes(busca);
-            const matchesEmp = !selEmp || i.Empreendimento === selEmp;
-            const matchesCons = !selCons || i.Construtora === selCons;
-            const matchesCid = !selCid || i.Cidade === selCid;
-            return matchesBusca && matchesEmp && matchesCons && matchesCid;
-        });
-
-        if (selEmp) verUnidades(selEmp);
-        else renderizarSumario(filtrados);
-    }
-
-    function resetarVista() {
-        document.getElementById('busca-global').value = "";
-        document.getElementById('filtra-empreendimento').value = "";
-        document.getElementById('filtro-construtora').value = "";
-        document.getElementById('filtro-cidade').value = "";
-        renderizarSumario(todosImoveis);
-    }
-
-    carregarDados();
+    load();
 </script>
 </body>
 </html>
