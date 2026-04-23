@@ -38,7 +38,7 @@
         
         .modal-blur { backdrop-filter: blur(12px); background-color: rgba(15, 23, 42, 0.7); }
         
-        /* AJUSTE MOBILE: Garante que o conteúdo role se for maior que a tela */
+        /* AJUSTE NO MODAL PARA NÃO CORTAR NO CELULAR */
         #conteudo-modal {
             max-height: 90vh;
             overflow-y: auto;
@@ -83,7 +83,7 @@
     <section class="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 shadow-2xl space-y-6 mb-10">
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-6 relative">
-                <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." class="w-full bg-slate-50 border border-slate-200 text-slate-600 text-sm rounded-2xl p-4 pl-12 focus:outline-none focus:ring-2 focus:ring-blue-500/20">
+                <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." class="w-full bg-slate-50 border border-slate-200 text-slate-600 text-sm rounded-2xl p-4 pl-12 focus:outline-none">
                 <svg class="w-5 h-5 text-slate-400 absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-width="2"></path></svg>
             </div>
             <div class="md:col-span-2">
@@ -117,7 +117,6 @@
 </div>
 
 <script>
-    // SEU LINK DA PLANILHA
     const LINK_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROTgHcXnaIQlwelJZknF-e_RAKvjPKgWeZVN2GSoajz1ORsCMfNWv1FwZGadV9c4gSfGHw29w3zRRL/pub?output=csv'; 
     let todosImoveis = [];
 
@@ -221,7 +220,6 @@
                     <div>
                         <span class="text-blue-500 font-black uppercase text-[10px] tracking-widest">Revenda Disponível</span>
                         <h2 class="text-3xl font-black text-slate-900 uppercase mt-2">${item.Empreendimento}</h2>
-                        
                         <div class="grid grid-cols-2 gap-4 mt-8 mb-8">
                             <div class="bg-slate-50 p-4 rounded-2xl">
                                 <p class="text-[9px] font-bold text-slate-400 uppercase">Unidade</p>
@@ -232,7 +230,6 @@
                                 <p class="text-xl font-black text-slate-800">${item.Metragem}m²</p>
                             </div>
                         </div>
-
                         <div class="space-y-6">
                             <div>
                                 <p class="text-[9px] font-bold text-slate-400 uppercase">Valor Total</p>
@@ -250,7 +247,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <div class="mt-8">
                         <a href="https://wa.me/5511991183368?text=${whatsMsg}" target="_blank" class="flex items-center justify-center w-full py-5 bg-[#25D366] text-white rounded-2xl font-black uppercase tracking-widest hover:opacity-90 transition">
                            Agendar Visita / Detalhes
@@ -276,7 +272,7 @@
         const filtrados = todosImoveis.filter(i => {
             const matchesBusca = !busca || (i.Empreendimento + i.Cidade + i.Construtora).toLowerCase().includes(busca);
             const matchesEmp = !selEmp || i.Empreendimento === selEmp;
-            const matchesCons = !selCons || i.Construtora === cons; // Corrigido para variável selCons
+            const matchesCons = !selCons || i.Construtora === selCons;
             const matchesCid = !selCid || i.Cidade === selCid;
             return matchesBusca && matchesEmp && matchesCons && matchesCid;
         });
