@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Revendas | Sotere Negócios Imobiliários</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; margin: 0; }
+        
+        .navbar { 
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+            padding: 20px 0;
+        }
+        
+        .hero-section {
+            position: relative;
+            background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)), 
+                        url('https://i.postimg.cc/mD8p2p5D/Design-sem-nome-13.png');
+            background-size: cover;
+            background-position: center;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            color: white;
+            padding-top: 80px;
+        }
+
+        .card-summary { transition: all 0.3s ease; border-radius: 2rem; border: 1px solid #e2e8f0; background: white; height: 100%; display: flex; flex-direction: column; overflow: hidden; cursor: pointer; }
+        .card-summary:hover { transform: translateY(-5px); border-color: #3b82f6; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .modal-blur { backdrop-filter: blur(12px); background-color: rgba(15, 23, 42, 0.7); }
+        
+        /* Ajuste Fino Scroll Modal */
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        @media (max-width: 768px) {
+            .hero-section { min-height: 400px; text-align: center; }
+            .hero-section h1 { font-size: 2.2rem; }
+            .navbar .container { flex-direction: column; gap: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container mx-auto px-6 flex justify-between items-center">
+        <img src="https://i.postimg.cc/t4mP6vW0/SOTERE-NEGOCIOS-IMOBILIARIOS-LOGO-BRANCA.png" alt="Sotere Logo" class="h-12 md:h-16">
+        <div class="flex items-center gap-2 bg-black/30 backdrop-blur-md px-4 py-2 rounded-full border border-white/10">
+            <span id="total-geral" class="text-white font-bold text-[10px] md:text-xs uppercase tracking-wider">Carregando estoque...</span>
+        </div>
+    </div>
+</nav>
+
+<section class="hero-section">
+    <div class="container mx-auto px-6">
+        <div class="max-w-3xl">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight uppercase">Portal de Revendas <span class="text-blue-400">Patriani</span></h1>
+            <div class="h-1 w-24 bg-blue-500 mb-6"></div>
+            <p class="text-lg md:text-2xl font-light text-slate-100 uppercase">Gestão estratégica e curadoria da <strong class="font-bold text-white border-b-2 border-blue-500">Sotere</strong>.</p>
+        </div>
+    </div>
+</section>
+
+<main class="container mx-auto px-6 -mt-12 md:-mt-20 relative z-10">
+    <section class="bg-white p-6 md:p-8 rounded-[2rem] shadow-2xl mb-10 border border-slate-100">
+        <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome ou cidade..." 
+               class="w-full bg-slate-50 border border-slate-200 text-slate-600 text-sm rounded-2xl p-4 focus:outline-none">
+    </section>
+    <div id="view-container"></div>
+</main>
+
+<div id="modal-detalhes" class="hidden fixed inset-0 z-[60] modal-blur flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-[2rem] md:rounded-[2.5rem] shadow-2xl relative">
+        <button onclick="fecharModal()" class="absolute top-4 right-4 z-[70] bg-white/90 backdrop-blur rounded-full p-2 shadow-lg hover:bg-slate-100">
+            <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div id="conteudo-modal" class="overflow-y-auto custom-scrollbar h-full max-h-[90vh]">
+            </div>
+    </div>
+</div>
+
+<script>
+    const LINK_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROTgHcXnaIQlwelJZknF-e_RAKvjPKgWeZVN2GSoajz1ORsCMfNWv1FwZGadV9c4gSfGHw29w3zRRL/pub?output=csv'; 
+    let todosImoveis = [];
+
+    function carregarDados() {
+        Papa.parse(LINK_CSV, {
+            download: true, header: true, skipEmptyLines: true,
+            complete: function(r) {
+                todosImoveis = r.data.filter(i => i.Empreendimento);
+                document.getElementById('total-geral').innerText = `${todosImoveis.length} Unidades Disponíveis`;
+                renderizarSumario(todosImoveis);
+            }
+        });
+    }
+
+    function renderizarSumario(items) {
+        const container = document.getElementById('view-container');
+        const agrupado = items.reduce((acc, curr) => {
+            if (!acc[curr.Empreendimento]) {
+                acc[curr.Empreendimento] = { nome: curr.Empreendimento, construtora: curr.Construtora, cidade: curr.Cidade, foto: curr['Foto Empreendimento'], total: 0 };
+            }
+            acc[curr.Empreendimento].total++;
+            return acc;
+        }, {});
+
+        container.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6";
+        container.innerHTML = Object.values(agrupado).map(p => `
+            <div class="card-summary" onclick="verUnidades('${p.nome}')">
+                <div class="h-48 bg-cover bg-center" style="background-image: url('${p.foto}')"></div>
+                <div class="p-6">
+                    <span class="text-[9px] font-black text-blue-600 uppercase mb-2 block">${p.construtora}</span>
+                    <h3 class="text-lg font-extrabold text-slate-800 uppercase leading-tight">${p.nome}</h3>
+                    <p class="text-slate-400 text-[10px] font-medium uppercase mt-1">${p.cidade} • ${p.total} unidades</p>
+                </div>
+            </div>`).join('');
+    }
+
+    function verUnidades(nome) {
+        const filtrados = todosImoveis.filter(i => i.Empreendimento === nome);
+        const container = document.getElementById('view-container');
+        container.className = "bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden";
+        container.innerHTML = `
+            <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+                <h2 class="text-xl font-extrabold text-slate-800 uppercase">${nome}</h2>
+                <button onclick="carregarDados()" class="text-blue-600 text-[10px] font-black uppercase tracking-widest">← Voltar</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase border-b">
+                        <tr><th class="p-6">Unidade</th><th class="p-6">Andar</th><th class="p-6">Valor</th><th class="p-6 text-center">Ação</th></tr>
+                    </thead>
+                    <tbody>
+                        ${filtrados.map(i => `
+                            <tr class="border-b hover:bg-slate-50 cursor-pointer" onclick='abrirFicha(${JSON.stringify(i).replace(/'/g, "&apos;")})'>
+                                <td class="p-6 font-bold text-slate-700">${i.Unidade}</td>
+                                <td class="p-6 text-slate-500">${i.Andar}º</td>
+                                <td class="p-6 font-black text-blue-600">${i['Valor Total']}</td>
+                                <td class="p-6 text-center"><span class="bg-slate-100 text-[10px] font-black px-3 py-1 rounded-lg">VER</span></td>
+                            </tr>`).join('')}
+                    </tbody>
+                </table>
+            </div>`;
+    }
+
+    function abrirFicha(item) {
+        const modal = document.getElementById('modal-detalhes');
+        const conteudo = document.getElementById('conteudo-modal');
+        const whatsMsg = encodeURIComponent(`Olá! Tenho interesse na unidade ${item.Unidade} do ${item.Empreendimento}.`);
+
+        conteudo.innerHTML = `
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                <div class="bg-slate-100">
+                    <img src="${item['Foto Unidade']}" class="w-full h-64 md:h-full object-cover">
+                </div>
+                <div class="p-8 md:p-12 flex flex-col justify-between">
+                    <div>
+                        <span class="text-blue-500 font-black uppercase text-[10px] tracking-widest">Revenda Disponível</span>
+                        <h2 class="text-3xl md:text-4xl font-black text-slate-900 uppercase mt-2 mb-6">${item.Empreendimento}</h2>
+                        
+                        <div class="grid grid-cols-2 gap-4 mb-8">
+                            <div class="bg-slate-50 p-4 rounded-2xl">
+                                <p class="text-[9px] font-bold text-slate-400 uppercase">Unidade/Andar</p>
+                                <p class="text-xl font-black text-slate-800">${item.Unidade} (${item.Andar}º)</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl">
+                                <p class="text-[9px] font-bold text-slate-400 uppercase">Metragem</p>
+                                <p class="text-xl font-black text-slate-800">${item.Metragem}m²</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase">Valor de Revenda</p>
+                                <p class="text-4xl font-black text-blue-600">${item['Valor Total']}</p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-t">
+                                <div>
+                                    <p class="text-[9px] font-bold text-slate-400 uppercase">Ato/Entrada</p>
+                                    <p class="text-lg font-bold text-emerald-600">${item.Ato || 'Sob Consulta'}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-bold text-slate-400 uppercase">Fluxo Restante</p>
+                                    <p class="text-lg font-bold text-slate-700">${item.Entrega || 'Sob Consulta'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-10">
+                        <a href="https://wa.me/5511991183368?text=${whatsMsg}" target="_blank" 
+                           class="flex items-center justify-center w-full py-5 bg-[#25D366] text-white rounded-2xl font-black uppercase tracking-widest hover:opacity-90 transition">
+                           Agendar Visita / Detalhes
+                        </a>
+                    </div>
+                </div>
+            </div>`;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModal() {
+        document.getElementById('modal-detalhes').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    function aplicarFiltros() {
+        const busca = document.getElementById('busca-global').value.toLowerCase();
+        const filtrados = todosImoveis.filter(i => (i.Empreendimento + i.Cidade).toLowerCase().includes(busca));
+        renderizarSumario(filtrados);
+    }
+
+    carregarDados();
+</script>
+</body>
+</html>
