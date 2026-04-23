@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Revendas | Sotere Negócios Imobiliários</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* --- CSS BASE E RESETS --- */
+        :root {
+            --blue-600: #2563eb;
+            --blue-700: #1d4ed8;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--slate-50); 
+            margin: 0; 
+            color: var(--slate-800);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        /* --- NAVBAR --- */
+        .navbar { 
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 50;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.5), transparent);
+            padding: 20px 0;
+        }
+        .navbar .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { h-height: 2.5rem; filter: brightness(0) invert(1); }
+        
+        .status-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(12px);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .pulse-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+
+        /* --- HERO --- */
+        .hero-section {
+            position: relative;
+            background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)), 
+                        url('https://www.construtorapatriani.com.br/_next/image?url=https%3A%2F%2Fd1l3zvrqp603kj.cloudfront.net%2F03_P_SP_FACHADA_VOO_DE_PASSARO_min_9b0ddc5155.jpg&w=1920&q=85');
+            background-size: cover;
+            background-position: center;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            color: white;
+            padding-top: 80px;
+        }
+        .hero-title { font-size: 3.75rem; font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
+        .hero-title span { color: #60a5fa; }
+        .hero-divider { height: 4px; width: 96px; background: #3b82f6; margin-bottom: 1.5rem; }
+        .hero-subtitle { font-size: 1.5rem; font-weight: 300; color: var(--slate-100); }
+
+        /* --- FILTROS --- */
+        .search-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 2.5rem;
+            border: 1px solid var(--slate-100);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            margin-top: -5rem;
+            position: relative;
+            z-index: 10;
+            display: grid;
+            grid-template-columns: repeat(12, minmax(0, 1fr));
+            gap: 1rem;
+        }
+        .input-group { grid-column: span 12; position: relative; }
+        .input-main { 
+            width: 100%; background: var(--slate-50); border: 1px solid var(--slate-200); 
+            padding: 1rem 1rem 1rem 3rem; border-radius: 1rem; outline: none; transition: 0.3s;
+        }
+        .input-main:focus { ring: 2px solid #dbeafe; }
+        
+        .filter-select { 
+            grid-column: span 3; background: var(--slate-50); border: 1px solid var(--slate-200);
+            padding: 0.75rem; border-radius: 0.75rem; font-weight: 700; text-transform: uppercase;
+            font-size: 0.75rem; color: var(--slate-500); cursor: pointer;
+        }
+        .btn-reset {
+            grid-column: span 3; background: var(--blue-600); color: white; border: none;
+            border-radius: 0.75rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-reset:hover { background: var(--blue-700); }
+
+        /* --- CARDS --- */
+        #view-container { margin-top: 2.5rem; margin-bottom: 2.5rem; }
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 2rem; }
+        
+        .card-summary { 
+            transition: all 0.3s ease; border-radius: 2rem; border: 1px solid #e2e8f0; 
+            background: white; height: 100%; display: flex; flex-direction: column; 
+            overflow: hidden; cursor: pointer; 
+        }
+        .card-summary:hover { transform: translateY(-5px); border-color: #3b82f6; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .card-img { h-height: 12rem; background-size: cover; background-position: center; }
+        .card-body { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        
+        /* --- MODAL --- */
+        .modal-blur { 
+            backdrop-filter: blur(12px); background-color: rgba(15, 23, 42, 0.7); 
+            position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 1rem;
+        }
+        .modal-content { 
+            background: white; width: 100%; max-width: 1024px; max-height: 90vh; 
+            overflow: hidden; border-radius: 2.5rem; position: relative; 
+        }
+        .hidden { display: none; }
+
+        /* --- TABELA --- */
+        .table-container { background: white; border-radius: 2rem; border: 1px solid var(--slate-100); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th { background: var(--slate-50); padding: 1.5rem; font-size: 0.6rem; color: var(--slate-400); text-transform: uppercase; }
+        td { padding: 1.5rem; border-bottom: 1px solid var(--slate-50); }
+        tr:hover td { background-color: var(--slate-100) !important; cursor: pointer; }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .search-box { grid-template-columns: 1fr; margin-left: 1rem; margin-right: 1rem; }
+            .filter-select, .btn-reset { grid-column: span 12; }
+            .hero-section { min-height: 400px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container">
+        <img src="https://sotereimoveis.com.br/wp-content/themes/itm/assets/img/logo/logo-sotere-dark.svg" alt="Sotere Logo" style="height: 40px; filter: brightness(0) invert(1);">
+        <div class="status-badge">
+            <span class="pulse-dot"></span>
+            <span id="total-geral" style="color: white; font-weight: bold; font-size: 12px; text-transform: uppercase;">Carregando...</span>
+        </div>
+    </div>
+</nav>
+
+<section class="hero-section">
+    <div class="container">
+        <div style="max-width: 768px;">
+            <h1 class="hero-title">Portal de Revendas <span>Patriani</span></h1>
+            <div class="hero-divider"></div>
+            <p class="hero-subtitle">
+                Oportunidades exclusivas com <br>
+                <strong style="font-weight: 800; border-bottom: 2px solid #3b82f6;">gestão estratégica e curadoria da Sotere.</strong>
+            </p>
+        </div>
+    </div>
+</section>
+
+<main class="container">
+    <section class="search-box">
+        <div class="input-group">
+            <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." class="input-main">
+        </div>
+        
+        <select id="filtra-empreendimento" onchange="aplicarFiltros()" class="filter-select">
+            <option value="">Empreendimento</option>
+        </select>
+
+        <select id="filtro-construtora" onchange="aplicarFiltros()" class="filter-select">
+            <option value="">Construtora</option>
+        </select>
+
+        <select id="filtro-cidade" onchange="aplicarFiltros()" class="filter-select">
+            <option value="">Cidade</option>
+        </select>
+
+        <button onclick="resetarVista()" class="btn-reset">Limpar Filtros</button>
+    </section>
+
+    <div id="view-container" class="grid-layout"></div>
+</main>
+
+<script>
+    // ... [Seu código JavaScript original aqui] ...
+</script>
+
+</body>
+</html>
