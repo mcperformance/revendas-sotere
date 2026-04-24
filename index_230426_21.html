@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Revendas | Sotere Negócios Imobiliários</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; margin: 0; }
+        
+        /* NAVBAR FIXA E ESCURA (CONFORME SOLICITADO) */
+        .navbar { 
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            background-color: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(8px);
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .hero-section {
+            position: relative;
+            background: linear-gradient(rgba(15, 23, 42, 0.4), rgba(15, 23, 42, 0.7)), 
+                        url('https://www.construtorapatriani.com.br/_next/image?url=https%3A%2F%2Fd1l3zvrqp603kj.cloudfront.net%2F03_P_SP_FACHADA_VOO_DE_PASSARO_min_9b0ddc5155.jpg&w=1920&q=85');
+            background-size: cover;
+            background-position: center;
+            min-height: 700px;
+            display: flex;
+            align-items: center;
+            color: white;
+            margin-top: 60px; /* Compensa a Navbar fixa */
+        }
+
+        .card-summary { transition: all 0.3s ease; border-radius: 2rem; border: 1px solid #e2e8f0; background: white; height: 100%; display: flex; flex-direction: column; overflow: hidden; cursor: pointer; }
+        .card-summary:hover { transform: translateY(-5px); border-color: #fb022e; box-shadow: 0 20px 25px -5px rgba(251, 2, 46, 0.1); }
+        
+        .modal-blur { backdrop-filter: blur(12px); background-color: rgba(15, 23, 42, 0.7); }
+        
+        /* REMOVE BARRA DE ROLAGEM NO PC SEM PERDER O SCROLL */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        tr:hover td { background-color: #f1f5f9 !important; cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .hero-section { min-height: 400px; text-align: center; }
+            .hero-section h1 { font-size: 2.5rem; }
+            .hero-section .h-1 { margin: 0 auto 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="container mx-auto px-6 flex justify-between items-center">
+        <img src="https://sotereimoveis.com.br/wp-content/themes/itm/assets/img/logo/logo-sotere-dark.svg" alt="Sotere Logo" class="h-8 md:h-10 brightness-0 invert">
+        
+        <div class="flex items-center gap-3">
+            <a href="https://www.sotereimoveis.com.br" target="_blank" class="border border-white/20 hover:bg-white/10 text-white text-[9px] md:text-[10px] font-black uppercase tracking-widest px-3 py-2 rounded-full transition-all">
+                Visite nosso Site
+            </a>
+            <div id="status-container" class="flex items-center gap-2 bg-white/5 backdrop-blur-md px-3 py-2 rounded-full border border-white/10">
+                <span id="status-led" class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse"></span>
+                <span id="total-geral" class="hidden md:block text-white font-bold text-[10px] uppercase tracking-wider">Carregando...</span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<section class="hero-section">
+    <div class="container mx-auto px-6">
+        <div class="max-w-3xl">
+            <h1 class="text-4xl md:text-6xl font-extrabold mb-4 leading-tight">Portal de Revendas <span style="color: #fb022e;">Patriani</span></h1>
+            <div class="h-1 w-24 mb-6" style="background-color: #fb022e;"></div>
+            <p class="text-lg md:text-2xl font-light text-slate-100">
+                Oportunidades exclusivas com <br class="hidden md:block">
+                <strong class="font-bold text-white border-b-2" style="border-color: #fb022e;">gestão estratégica e curadoria da Sotere.</strong>
+            </p>
+        </div>
+    </div>
+</section>
+
+<main class="container mx-auto px-6 -mt-12 md:-mt-20 relative z-10">
+    <section class="bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 shadow-2xl space-y-6 mb-10">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div class="md:col-span-12 relative">
+                <input type="text" id="busca-global" oninput="aplicarFiltros()" placeholder="Pesquise por nome, cidade ou construtora..." 
+                       class="w-full bg-slate-50 border border-slate-200 text-slate-600 text-sm rounded-2xl p-4 pl-12 focus:outline-none focus:ring-2 transition-all font-medium" style="--tw-ring-color: #fb022e1a;">
+                <svg class="w-5 h-5 text-slate-400 absolute left-4 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            
+            <div class="md:col-span-3">
+                <select id="filtra-empreendimento" onchange="aplicarFiltros()" class="w-full bg-slate-50 border border-slate-200 text-slate-500 text-xs rounded-xl p-3 outline-none font-bold uppercase tracking-wider cursor-pointer">
+                    <option value="">Empreendimento</option>
+                </select>
+            </div>
+
+            <div class="md:col-span-3">
+                <select id="filtro-construtora" onchange="aplicarFiltros()" class="w-full bg-slate-50 border border-slate-200 text-slate-500 text-xs rounded-xl p-3 outline-none font-bold uppercase tracking-wider cursor-pointer">
+                    <option value="">Construtora</option>
+                </select>
+            </div>
+
+            <div class="md:col-span-3">
+                <select id="filtro-cidade" onchange="aplicarFiltros()" class="w-full bg-slate-50 border border-slate-200 text-slate-500 text-xs rounded-xl p-3 outline-none font-bold uppercase tracking-wider cursor-pointer">
+                    <option value="">Cidade</option>
+                </select>
+            </div>
+
+            <div class="md:col-span-3">
+                <button onclick="resetarVista()" class="w-full h-full py-3 text-white rounded-xl text-[10px] font-black uppercase tracking-widest transition shadow-lg" style="background-color: #fb022e; box-shadow: 0 10px 15px -3px rgba(251, 2, 46, 0.2);">
+                    Menu Inicial
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div id="view-container"></div>
+</main>
+
+<div id="modal-detalhes" class="hidden fixed inset-0 z-[120] modal-blur flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-[2.5rem] shadow-2xl relative no-scrollbar">
+        <button onclick="fecharModal()" class="absolute top-4 right-4 md:top-8 md:right-8 z-50 bg-slate-100 rounded-full p-2 hover:bg-slate-200 transition">
+            <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+        <div id="conteudo-modal"></div>
+    </div>
+</div>
+
+<script>
+    const LINK_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vROTgHcXnaIQlwelJZknF-e_RAKvjPKgWeZVN2GSoajz1ORsCMfNWv1FwZGadV9c4gSfGHw29w3zRRL/pub?output=csv'; 
+    let todosImoveis = [];
+
+    function carregarDados() {
+        Papa.parse(LINK_CSV, {
+            download: true, header: true, skipEmptyLines: true,
+            complete: function(r) {
+                todosImoveis = r.data.filter(i => i.Empreendimento);
+                document.getElementById('total-geral').innerText = `${todosImoveis.length} Unidades Online`;
+                popularFiltros();
+                renderizarSumario(todosImoveis);
+            }
+        });
+    }
+
+    function popularFiltros() {
+        const fEmp = document.getElementById('filtra-empreendimento');
+        const fCons = document.getElementById('filtro-construtora');
+        const fCid = document.getElementById('filtro-cidade');
+        const nomes = [...new Set(todosImoveis.map(i => i.Empreendimento))].sort();
+        const construtoras = [...new Set(todosImoveis.map(i => i.Construtora))].sort();
+        const cidades = [...new Set(todosImoveis.map(i => i.Cidade))].sort();
+        nomes.forEach(n => fEmp.innerHTML += `<option value="${n}">${n}</option>`);
+        construtoras.forEach(c => fCons.innerHTML += `<option value="${c}">${c}</option>`);
+        cidades.forEach(cid => fCid.innerHTML += `<option value="${cid}">${cid}</option>`);
+    }
+
+    function formatarNumero(str) {
+        if (!str || str.trim() === "" || str.includes("---")) return null;
+        const num = parseFloat(str.replace(/[^\d]/g, '')) / 100;
+        return isNaN(num) ? null : num;
+    }
+
+    function renderizarSumario(items) {
+        const container = document.getElementById('view-container');
+        const agrupado = items.reduce((acc, curr) => {
+            if (!acc[curr.Empreendimento]) {
+                acc[curr.Empreendimento] = {
+                    nome: curr.Empreendimento,
+                    construtora: curr.Construtora,
+                    cidade: curr.Cidade,
+                    foto: curr['Foto Empreendimento'],
+                    precos: [],
+                    plantas: new Set(),
+                    total: 0
+                };
+            }
+            const valor = formatarNumero(curr['Valor Total']);
+            if (valor !== null) acc[curr.Empreendimento].precos.push(valor);
+            if (curr.Metragem) acc[curr.Empreendimento].plantas.add(curr.Metragem + 'm²');
+            acc[curr.Empreendimento].total++;
+            return acc;
+        }, {});
+
+        container.className = "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8";
+        container.innerHTML = Object.values(agrupado).map(p => {
+            const temPreco = p.precos.length > 0;
+            const min = temPreco ? Math.min(...p.precos).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : "Sob Consulta";
+            const max = temPreco ? Math.max(...p.precos).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }) : "";
+            const faixa = (max && max !== min) ? `${min} a ${max}` : min;
+
+            return `
+            <div class="card-summary" onclick="verUnidades('${p.nome}')">
+                <div class="h-48 bg-cover bg-center" style="background-image: url('${p.foto}')"></div>
+                <div class="p-6 flex flex-col flex-grow">
+                    <div class="flex justify-between items-center mb-3">
+                        <span class="text-[8px] font-black px-2 py-1 rounded-full uppercase" style="color: #fb022e; background-color: rgba(251, 2, 46, 0.08);">${p.construtora}</span>
+                        <span class="text-slate-400 text-[10px] font-bold">${p.total} Unid.</span>
+                    </div>
+                    <h3 class="text-lg font-extrabold text-slate-800 leading-tight mb-1">${p.nome}</h3>
+                    <p class="text-slate-400 text-[10px] font-medium mb-4 uppercase tracking-wider">${p.cidade}</p>
+                    <div class="mt-auto pt-4 border-t border-slate-50 space-y-3">
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-300 uppercase mb-1">Plantas</p>
+                            <p class="text-xs font-bold text-slate-600">${Array.from(p.plantas).sort().join(' | ')}</p>
+                        </div>
+                        <div>
+                            <p class="text-[8px] font-bold text-slate-300 uppercase mb-1">Valor Total</p>
+                            <p class="text-sm font-extrabold text-slate-800">${faixa}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    function verUnidades(nome) {
+        const filtrados = todosImoveis.filter(i => i.Empreendimento === nome);
+        const container = document.getElementById('view-container');
+        container.className = "bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden";
+        container.innerHTML = `
+            <div class="p-6 md:p-8 border-b border-slate-50 flex justify-between items-center bg-slate-50/30">
+                <h2 class="text-lg md:text-xl font-extrabold text-slate-800 uppercase">${nome}</h2>
+                <button onclick="resetarVista()" class="text-[10px] font-black uppercase tracking-widest" style="color: #fb022e;">← Voltar</button>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left min-w-[600px]">
+                    <thead class="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-b border-slate-100">
+                        <tr>
+                            <th class="p-6">Unidade</th><th class="p-6">Andar</th><th class="p-6">Planta</th><th class="p-6">Previsão</th><th class="p-6">Valor</th><th class="p-6 text-center">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filtrados.map(i => `
+                            <tr class="border-b border-slate-50" onclick='abrirFicha(${JSON.stringify(i).replace(/'/g, "&apos;")})'>
+                                <td class="p-6 font-bold text-slate-700">${i.Unidade}</td>
+                                <td class="p-6 text-slate-500">${i.Andar}º</td>
+                                <td class="p-6 text-slate-500">${i.Metragem}m²</td>
+                                <td class="p-6 text-slate-500 text-[10px]">${i['Previsão Entrega'] || i.Status}</td>
+                                <td class="p-6 font-extrabold" style="color: #fb022e;">${i['Valor Total']}</td>
+                                <td class="p-6 text-center"><span class="bg-slate-100 text-slate-400 text-[10px] font-black px-3 py-1 rounded-lg">VER</span></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>`;
+        window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
+
+    function abrirFicha(item) {
+        const modal = document.getElementById('modal-detalhes');
+        const conteudo = document.getElementById('conteudo-modal');
+        const whatsMsg = encodeURIComponent(`Olá! Tenho interesse na unidade ${item.Unidade} do ${item.Empreendimento}.`);
+
+        conteudo.innerHTML = `
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                <div class="bg-slate-50 p-6 md:p-12 flex flex-col justify-center border-b lg:border-b-0 lg:border-r border-slate-100">
+                    <img src="${item['Foto Unidade']}" class="w-full h-64 md:h-80 object-cover rounded-[1.5rem] md:rounded-[2rem] shadow-xl mb-6" onerror="this.src='https://via.placeholder.com/600x400'">
+                    <h2 class="text-2xl md:text-4xl font-black text-slate-900">${item.Empreendimento}</h2>
+                    <p class="text-slate-500 text-xs md:text-sm font-medium mt-2">${item['Endereço'] || ''}</p>
+                </div>
+                <div class="p-6 md:p-12 flex flex-col bg-white">
+                    <div class="mb-8">
+                        <span class="font-black uppercase text-[9px] tracking-widest" style="color: #fb022e;">Revenda Disponível</span>
+                        <p class="text-3xl md:text-5xl font-black text-slate-900 mt-2">${item['Valor Total']}</p>
+                        <p class="text-[10px] text-slate-400 font-semibold mb-6 uppercase tracking-wider">m² médio: ${item['m²'] || 'Consultar'}</p>
+                        
+                        <div class="grid grid-cols-2 gap-3 mb-6">
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                <p class="text-[8px] font-bold text-slate-300 uppercase mb-1">Unidade/Andar</p>
+                                <p class="text-base md:text-lg font-black text-slate-700">${item.Unidade} (${item.Andar}º)</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                                <p class="text-[8px] font-bold text-slate-300 uppercase mb-1">Metragem</p>
+                                <p class="text-base md:text-lg font-black text-slate-700">${item.Metragem}m²</p>
+                            </div>
+                        </div>
+
+                        <div class="pt-6 border-t border-slate-100 grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-[8px] font-bold text-slate-300 uppercase mb-1">Ato Sugerido</p>
+                                <p class="text-lg font-black text-emerald-600">${item.Ato || 'Consultar'}</p>
+                            </div>
+                            <div>
+                                <p class="text-[8px] font-bold text-slate-300 uppercase mb-1">Fluxo/Diferença</p>
+                                <p class="text-lg font-black" style="color: #fb022e;">${item.Entrega || 'Consultar'}</p>
+                            </div>
+                        </div>
+
+                        ${item['Observação'] ? `
+                        <div class="mt-6 p-4 bg-slate-50 border-l-4 rounded-r-xl" style="border-color: #fb022e;">
+                            <p class="text-[8px] font-bold text-slate-400 uppercase mb-1 tracking-widest">Observações Importantes</p>
+                            <p class="text-xs text-slate-600 leading-relaxed font-semibold">${item['Observação']}</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                    
+                    <div class="mt-auto pb-4">
+                        <a href="https://wa.me/5511991183368?text=${whatsMsg}" target="_blank" 
+                           class="flex items-center justify-center gap-3 w-full py-5 bg-[#25D366] text-white rounded-2xl font-black uppercase text-[10px] tracking-widest hover:opacity-90 transition shadow-xl">
+                            Falar com a equipe
+                        </a>
+                        <p class="text-center text-[8px] text-slate-300 uppercase font-bold mt-4 tracking-tighter">Atendimento exclusivo Sotere Negócios Imobiliários</p>
+                    </div>
+                </div>
+            </div>`;
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModal() {
+        document.getElementById('modal-detalhes').classList.add('hidden');
+        document.body.style.overflow = 'auto';
+    }
+
+    function aplicarFiltros() {
+        const busca = document.getElementById('busca-global').value.toLowerCase();
+        const selEmp = document.getElementById('filtra-empreendimento').value;
+        const selCons = document.getElementById('filtro-construtora').value;
+        const selCid = document.getElementById('filtro-cidade').value;
+        const filtrados = todosImoveis.filter(i => {
+            const matchesBusca = !busca || (i.Empreendimento + i.Cidade + i.Construtora).toLowerCase().includes(busca);
+            const matchesEmp = !selEmp || i.Empreendimento === selEmp;
+            const matchesCons = !selCons || i.Construtora === selCons;
+            const matchesCid = !selCid || i.Cidade === selCid;
+            return matchesBusca && matchesEmp && matchesCons && matchesCid;
+        });
+        if (selEmp) verUnidades(selEmp);
+        else renderizarSumario(filtrados);
+    }
+
+    function resetarVista() {
+        document.getElementById('busca-global').value = "";
+        document.getElementById('filtra-empreendimento').value = "";
+        document.getElementById('filtro-construtora').value = "";
+        document.getElementById('filtro-cidade').value = "";
+        renderizarSumario(todosImoveis);
+    }
+
+    carregarDados();
+</script>
+</body>
+</html>
